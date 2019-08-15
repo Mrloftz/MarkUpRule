@@ -1,10 +1,11 @@
 import React from 'react'
 import 'antd/dist/antd.css'
-import { Table, Popconfirm, Divider, Input } from 'antd'
+import { Table, Popconfirm, Input } from 'antd'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { GetFareAll, DeleteFare, GetFare, GetList } from '../../../_service/MethodApi';
+import { GetFareAll, DeleteFare, GetList } from '../../../_service/MethodApi';
 import { BreadCrumb } from '../../breadcrum'
+import CreateFare from '../../button/createFare';
 
 const { Search } = Input
 class TableFare extends React.Component {
@@ -35,10 +36,9 @@ class TableFare extends React.Component {
             {
                 title: 'Delete',
                 key: 'delete',
-                render: (record) => (
+                render: (text, record) => (
                     <span>
                         <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.id)}>
-                            <Divider type="vertical" />
                             <label>Delete</label>
                         </Popconfirm>
                     </span>
@@ -46,33 +46,31 @@ class TableFare extends React.Component {
             }
         ]
     }
-
-
-
     async componentDidMount() {
         // axios get Data all
         const dataSource = await GetFareAll()
-        console.log(dataSource)
+        this.setState({ dataSource: dataSource.data})
+        console.log(dataSource.data)
         // const dataSource = await GetFare(id)
         // console.log(dataSource)
         // this.setState({ dataSource: dataSource.data.data.})
     }
-    handleDelete = () => {
-        // axios Delate Data
-        // await DeleteFare(id)
-        // this.setState({ dataSource: dataSource.data})
+    handleDelete = async id => {
+        await DeleteFare(id)
+        this.setState({ dataSource: this.state.dataSource.filter(item => item.id !== id)})
     }
     handleSearch = async value => {
         // axios get search api
         const dataSource = await GetList(value)
-        this.setState({ dataSource: dataSource.data.fareDetails})
+        this.setState({ dataSource: dataSource.data })
     }
     render() {
         const columns = this.columns
         return (
             <div>
-                <ContainarSub> 
+                <ContainarSub>
                     <BreadCrumb />
+                    <CreateFare />
                     <h1>Fare</h1>
                     <ContainSearch>
                         <Search

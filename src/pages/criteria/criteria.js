@@ -1,9 +1,10 @@
 import React from 'react'
+import TableCriteria from '../../components/criteria/table/tableCriteria';
 
 class CriteriaPage extends React.Component {
     render() {
         return(
-            <div>Criteria Page</div>
+            <TableCriteria />
         )
     }
 }

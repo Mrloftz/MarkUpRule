@@ -1,10 +1,11 @@
 import React from 'react'
+import EditableTable from '../../components/fare/farePage';
 
 
 class FarePage extends React.Component {
     render() {
         return(
-            <div>FarePage</div>
+            <EditableTable />
         )
     }
 }
