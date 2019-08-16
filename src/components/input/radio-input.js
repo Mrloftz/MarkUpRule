@@ -15,7 +15,7 @@ const FieldRadioInput = ({
                 {data.map((ratio, index) => {
                     return (
                         <Radio value={ratio.value} key={index}>
-                            {ratio.label}{' '}
+                            {ratio.label}
                         </Radio>
                     )
                 })}

@@ -1,8 +1,10 @@
 import React from 'react'
 import 'antd/dist/antd.css'
-import { Table, Popconfirm, Input } from 'antd'
+import { Table, Popconfirm, Input, Button } from 'antd'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import CreateCriteria from '../../button/createCriteria';
+
 
 import { GetCriteriaAll, DeleteCriteria, GetListCriteria } from '../../../_service/MethodApi';
 
@@ -18,23 +20,28 @@ class TableCriteria extends React.Component {
         }
         this.columns = [
             {
+                title: 'Name',
+                dataIndex: 'name',
+                key: ''
+            },
+            {
                 title: 'Departure',
-                dataIndex: 'destination',
+                dataIndex: 'destinations',
                 key: ''
             },
             {
                 title: 'Country Code',
-                dataIndex: 'country',
+                dataIndex: 'countries',
                 key: ''
             },
             {
                 title: 'Type of Pax',
-                dataIndex: 'paxType',
+                dataIndex: 'paxTypes',
                 key: ''
             },
             {
                 title: 'Activity Name',
-                dataIndex: 'activityName',
+                dataIndex: 'activityNames',
                 key: ''
             },
             {
@@ -43,7 +50,7 @@ class TableCriteria extends React.Component {
                 render: (text, record) => (
                     <span>
                         <Link to={`/criteria/${record.id}`}>
-                            <label>Edit</label>
+                            <Button type="primary">Edit</Button>
                         </Link>
                     </span>
                 )
@@ -53,7 +60,7 @@ class TableCriteria extends React.Component {
                 key: 'delete',
                 render: (text, record) => (
                     <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.id)}>
-                        <label>Delete</label>
+                        <Button type="danger">Delete</Button>
                     </Popconfirm>
                 )
             },
@@ -80,6 +87,7 @@ class TableCriteria extends React.Component {
             <div>
                 <ContainarSub >
                     <h1>Criteria</h1>
+                    <CreateCriteria />
                     <ContainSearch>
                         <Search
                             style={{ width: '80%', float: 'right', marginRight: '1rem' }}

@@ -1,9 +1,9 @@
 import React from 'react'
 import 'antd/dist/antd.css'
-import { Table, Popconfirm, Input } from 'antd'
+import { Table, Popconfirm, Input, Button } from 'antd'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { GetFareAll, DeleteFare, GetList } from '../../../_service/MethodApi';
+import { GetFareAll, DeleteFare, GetList, GetFare, GetCriteria } from '../../../_service/MethodApi';
 import { BreadCrumb } from '../../breadcrum'
 import CreateFare from '../../button/createFare';
 
@@ -28,7 +28,7 @@ class TableFare extends React.Component {
                 render: (text, record) => (
                     <span>
                         <Link to={`/fare/${record.id}`}>
-                            <label>Edit</label>
+                            <Button type="primary">Edit</Button>
                         </Link>
                     </span>
                 )
@@ -39,7 +39,7 @@ class TableFare extends React.Component {
                 render: (text, record) => (
                     <span>
                         <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.id)}>
-                            <label>Delete</label>
+                            <Button type="danger">Delete</Button>
                         </Popconfirm>
                     </span>
                 )
@@ -50,10 +50,6 @@ class TableFare extends React.Component {
         // axios get Data all
         const dataSource = await GetFareAll()
         this.setState({ dataSource: dataSource.data})
-        console.log(dataSource.data)
-        // const dataSource = await GetFare(id)
-        // console.log(dataSource)
-        // this.setState({ dataSource: dataSource.data.data.})
     }
     handleDelete = async id => {
         await DeleteFare(id)

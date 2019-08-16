@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+
 const base_url = 'http://travizgo.dosetech.co:7799'
 
 // Fare API
@@ -7,7 +8,7 @@ const base_url = 'http://travizgo.dosetech.co:7799'
 //getFare All
 export const GetFareAll = async () => {
     return await axios
-    .get(base_url + '/fare/getAll')
+    .get(base_url + '/fare/all')
     .then(response => {
         return response
     })
@@ -19,7 +20,7 @@ export const GetFareAll = async () => {
 //getFare with params
 export const GetFare = async id => {
     return await axios
-    .get(base_url + `/fare/get/${id}`)
+    .get(base_url + `/fare/${id}`)
     .then(response => {
         return response
     })
@@ -36,7 +37,7 @@ export const GetList = async  keyword => {
         itemPerPage: 5, 
     }
     return await axios
-    .post(base_url + '/fare/getList', body)
+    .post(base_url + '/fare/list', body)
     .then(reponse => {
         return reponse
     })
@@ -48,7 +49,7 @@ export const GetList = async  keyword => {
 // create Fare
 export const CreateFare = data => {
     return axios 
-    .post(base_url + '/fare/create', data)
+    .post(base_url + '/fare', data)
     .then(response => {
         return response
     })
@@ -60,7 +61,7 @@ export const CreateFare = data => {
 // update Fare
 export const UpdateFare = body => {
     return axios
-    .post(base_url + '/fare/update', body)
+    .put(base_url + '/fare', body)
     .then(response => {
         return response
     })
@@ -72,7 +73,7 @@ export const UpdateFare = body => {
 // delete Fare 
 export const DeleteFare = async id => {
     return await axios
-    .get(base_url + `/fare/delete/${id}`)
+    .delete(base_url + `/fare/${id}`)
     .then(response => {
         return response
     })
@@ -86,7 +87,7 @@ export const DeleteFare = async id => {
 //Get ALL
 export const GetCriteriaAll = async () => {
     return await axios
-      .get(base_url + '/criteria/getAll')
+      .get(base_url + '/criteria/all')
       .then(response => {
         return response
       })
@@ -97,7 +98,7 @@ export const GetCriteriaAll = async () => {
 //Get with params
   export const GetCriteria = async id => {
       return await axios 
-      .get(base_url + `/criteria/get/${id}`)
+      .get(base_url + `/criteria/${id}`)
       .then(response => {
           return response
       })
@@ -113,7 +114,7 @@ export const GetListCriteria = async keyword => {
         itemPerPage: 5,
     }
     return await axios
-    .post(base_url + '/criteria/getList', body)
+    .post(base_url + '/criteria/list', body)
     .then(response => {
         return response
     })
@@ -124,7 +125,7 @@ export const GetListCriteria = async keyword => {
 //Create Criteria
 export const CreateCriteria = data => {
     return axios
-    .post(base_url + '/criteria/create', data)
+    .post(base_url + '/criteria', data)
     .then(response => {
         return response
     })
@@ -135,7 +136,7 @@ export const CreateCriteria = data => {
 //update Criteria
 export const UpdateCriteria = body => {
     return axios 
-    .post(base_url + '/criteria/update', body)
+    .put(base_url + '/criteria', body)
     .then(response => {
         return response
     })
@@ -146,9 +147,90 @@ export const UpdateCriteria = body => {
 //Delete Criteria
 export const DeleteCriteria = async id => {
     return axios
-    .post(base_url + `/criteria/delete/${id}`)
+    .post(base_url + `/criteria/${id}`)
     .then(response => {
         return response
+    })
+    .catch(error => {
+        return error
+    })
+}
+
+// API MARK UP RULE
+
+// Get MarkupRule All
+export const GetAllMarkUpRule = async () => {
+    return axios
+    .get(base_url + '/markupRule/all')
+    .then(response => {
+        return response
+    })
+    .catch(error => {
+        return error
+    })
+}
+// Get MarkupRule with params
+export const GetMarkupRule = async id => {
+    return axios
+    .get(base_url + `/markupRule/${id}`)
+    .then(response => {
+        return response
+    })
+    .catch(error => {
+        return error
+    })
+}
+
+// GetMarkupRule List 
+
+export const GetListMarkupRule = async keyword => {
+    const body  = {
+        name: keyword,
+        page: '1',
+        itemPerPage: 5
+    }
+    return axios
+    .post(base_url + '/markuprule/list', body)
+    .then(response => {
+        return response
+    })
+    .catch(error => {
+        return error
+    })
+}
+
+// Create MarkupRule
+
+export const CreateMarkupRule = data => {
+    return axios
+    .post(base_url + '/markupRule', data)
+    .then(response => {
+        return response
+    })
+    .catch(error => {
+        return error
+    })
+}
+
+// Get All MarkupType 
+export const GetAllMarkupType = async () => {
+    return axios
+    .get(base_url + '/markupType')
+    .then(response => {
+        return response
+    })
+    .catch(error => {
+        return error
+    })
+}
+
+// Get All pax type
+
+export const GetAllpaxType = async () => {
+    return axios
+    .get(base_url + '/paxtype')
+    .then(reponse => {
+        return reponse
     })
     .catch(error => {
         return error

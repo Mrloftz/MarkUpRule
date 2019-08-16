@@ -172,11 +172,11 @@ class EditableTable extends React.Component {
         const { count, dataSource } = this.state
         const newData = {
             key: count,
-            title: ``,
-            priceTo: ``,
-            priceFrom: ``,
-            markupType: ``,
-            markupRate: ``,
+            title: '',
+            priceTo: '',
+            priceFrom: '',
+            markupType: '',
+            markupRate: '',
         };
         this.setState({
             dataSource: [...this, newData],
