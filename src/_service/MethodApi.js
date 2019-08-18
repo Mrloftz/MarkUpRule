@@ -123,7 +123,7 @@ export const GetListCriteria = async keyword => {
     })
 }
 //Create Criteria
-export const CreateCriteria = data => {
+export const CriteriaCreate = data => {
     return axios
     .post(base_url + '/criteria', data)
     .then(response => {

@@ -3,9 +3,8 @@ import { Formik, Field } from 'formik'
 import { FieldInput, FieldCheckboxInput } from '../../components/input'
 import { ValidateSchema } from '../../helper/validator'
 import styled from 'styled-components'
-import { GetCriteria, DeleteCriteria, UpdateCriteria } from '../../_service/MethodApi';
+import { GetCriteria, DeleteCriteria, UpdateCriteria, CriteriaCreate } from '../../_service/MethodApi';
 import { Button } from 'antd'
-import CreateCriteria from '../button/createCriteria';
 
 export const CriteriaComponent = props => {
     const [name, setName] = useState()
@@ -26,14 +25,14 @@ export const CriteriaComponent = props => {
             setName(data.name)
             setDestinations(data.destination)
             SetCountries(data.country)
-            setPaxTypes(data.paxType)
+            setPaxTypes(data.paxType.label)
             setActivityNames(data.activityName)
         }
         if (CheckParams.id) {
             fetchData(CheckParams.id)
         }
 
-    })
+    },[CheckParams.id])
 
     return (
         <React.Fragment>
@@ -58,10 +57,11 @@ export const CriteriaComponent = props => {
                             activityNames: formValues.activityNames
                         }
                         if (CheckParams.id) {
-                            await UpdateCriteria(data)
+                            const responseUpdate =  await UpdateCriteria(data)
+                            console.log(responseUpdate)
                         } else {
-                            const response = await CreateCriteria(data)
-                            console.log(response)
+                            const responseCreate = await CriteriaCreate(data)
+                            console.log(responseCreate)
                         }
                         history.push('/')
                     }}
