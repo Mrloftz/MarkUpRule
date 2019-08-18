@@ -1,17 +1,17 @@
 import React from 'react'
-import EditableTable from '../../components/fare/farePage';
+
 import { HomeLayout } from '../../components/layout/home-layout';
 
 
-class FarePage extends React.Component {
+class MarkUpRulePage extends React.Component {
     render() {
         return(
             <HomeLayout>
-            <EditableTable />
+            <div>TEST</div>
             </HomeLayout>
      
         )
     }
 }
 
-export default FarePage
+export default MarkUpRulePage

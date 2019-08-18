@@ -1,26 +1,27 @@
 import React, { useState, useEffect } from 'react'
-import { Formik, Field, replace } from 'formik'
-import { FieldInput } from '../../components/input/input'
+import { Formik, Field } from 'formik'
+import { FieldInput, FieldCheckboxInput } from '../../components/input'
 import { ValidateSchema } from '../../helper/validator'
 import styled from 'styled-components'
 import { GetCriteria, DeleteCriteria, UpdateCriteria } from '../../_service/MethodApi';
 import { Button } from 'antd'
 import CreateCriteria from '../button/createCriteria';
-// import { FieldRadioInput } from '../input/radio-input';
 
 export const CriteriaComponent = props => {
-    const [name, setName] = useState([])
-    const [destinations, setDestinations] = useState([])
-    const [countries, SetCountries] = useState([])
-    const [paxTypes, setPaxTypes] = useState()
+    const [name, setName] = useState()
+    const [destinations, setDestinations] = useState()
+    const [countries, SetCountries] = useState()
     const [paxTypesMap, setPaxTypesMap] = useState([{ id: 0, label: 'adult', value: 0, }, { id: 1, label: 'child', value: '1' }, { id: 2, label: 'infant', value: 2 }])
-    const [activityNames, setActivityNames] = useState([])
+    const [paxTypes, setPaxTypes] = useState(paxTypesMap)
+    const [activityNames, setActivityNames] = useState('%%')
 
     const CheckParams = props.params
+    console.log(CheckParams)
     const { history } = props
+
     useEffect(() => {
         const fetchData = async id => {
-            const data  = await GetCriteria(id)
+            const { data }  = await GetCriteria(id)
             console.log(data)
             setName(data.name)
             setDestinations(data.destination)
@@ -28,7 +29,10 @@ export const CriteriaComponent = props => {
             setPaxTypes(data.paxType)
             setActivityNames(data.activityName)
         }
-        fetchData()
+        if (CheckParams.id) {
+            fetchData(CheckParams.id)
+        }
+
     })
 
     return (
@@ -88,12 +92,13 @@ export const CriteriaComponent = props => {
                                 placeholder="Country code"
                             />
                             <Titlesub>Type of Pax</Titlesub>
-                            {/* <Field
+                            <Field
                                 name="paxTypes"
-                                component={FieldRadioInput}
+                                component={FieldCheckboxInput}
                                 value={props.values.paxTypes}
                                 onChange={props.handleChange}
-                            /> */}
+                                data={paxTypesMap}
+                            />
                             <Titlesub>Activity Name</Titlesub>
                             <Field
                                 name="activityNames"

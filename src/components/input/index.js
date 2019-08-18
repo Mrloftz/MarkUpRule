@@ -1,2 +1,2 @@
 export * from './input'
-export * from './radio-input'
+export * from './input-checkbox'
