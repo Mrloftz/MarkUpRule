@@ -66,8 +66,8 @@ class TableFare extends React.Component {
             <div>
                 <ContainarSub>
                     <BreadCrumb />
+                    <h1>Fare</h1> 
                     <CreateFare />
-                    <h1>Fare</h1>
                     <ContainSearch>
                         <Search
                             style={{ width: '80%', float: 'right', marginRight: '1rem' }}
