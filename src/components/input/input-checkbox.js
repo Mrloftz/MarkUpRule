@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Radio } from 'antd';
+import { Checkbox } from 'antd';
 
 
 const FieldCheckboxInput = ({
@@ -9,18 +9,19 @@ const FieldCheckboxInput = ({
     data,
     ...rest
 }) => {
+  console.log(field)
     const error = (touched[field.name] && errors[field.name]) || errors[field.name] ? 1 : 0
     return (
       <React.Fragment>
-        <Radio.Group {...field}>
+        <Checkbox.Group {...field}>
           {data.map((ratio, index) => {
             return (
-              <Radio value={ratio.value} key={index}>
+              <Checkbox value={ratio.value} key={index}>
                 {ratio.label}{' '}
-              </Radio>
+              </Checkbox>
             )
           })}
-        </Radio.Group>
+        </Checkbox.Group>
         <ErrorText>{(touched[field.name] && errors[field.name]) || errors[field.name]}</ErrorText>
       </React.Fragment>
     )

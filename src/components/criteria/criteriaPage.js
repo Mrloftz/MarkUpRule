@@ -4,7 +4,8 @@ import { FieldInput, FieldCheckboxInput } from '../../components/input'
 import { ValidateSchema } from '../../helper/validator'
 import styled from 'styled-components'
 import { GetCriteria, DeleteCriteria, UpdateCriteria, CriteriaCreate } from '../../_service/MethodApi';
-import { Button } from 'antd'
+import { Button, Checkbox } from 'antd'
+import CheckboxGroup from 'antd/lib/checkbox/Group';
 
 export const CriteriaComponent = props => {
     const [name, setName] = useState()
@@ -13,11 +14,28 @@ export const CriteriaComponent = props => {
     const [paxTypesMap, setPaxTypesMap] = useState([{ id: 0, label: 'adult', value: 0, }, { id: 1, label: 'child', value: '1' }, { id: 2, label: 'infant', value: 2 }])
     const [paxTypes, setPaxTypes] = useState(paxTypesMap)
     const [activityNames, setActivityNames] = useState('%%')
+    const [checkAll, setCheckAll] = useState(false)
+    const [indeterminate, setIndeterminate] = useState(true)
+    const [checkedList, setCheckedList] = useState('adult')
 
     const CheckParams = props.params
     console.log(CheckParams)
     const { history } = props
 
+    const onChange = checkedList => {
+        this.setState({
+            checkedList,
+            indeterminate: !!checkedList.length && checkedList.length < paxTypesMap.length,
+            checkAll: checkedList.length === paxTypesMap.length,
+        });
+    }
+    const onCheckAllChange = e => {
+        this.setState({
+            checkedList: e.target.checked ? paxTypesMap : [],
+            indeterminate: false,
+            checkAll: e.target.checked,
+          });
+    }
     useEffect(() => {
         const fetchData = async id => {
             const { data }  = await GetCriteria(id)
@@ -54,7 +72,7 @@ export const CriteriaComponent = props => {
                             destinations: formValues.destinations,
                             countries: formValues.countries,
                             paxTypes: formValues.paxTypes,
-                            activityNames: formValues.activityNames
+                            activityNames: `%${formValues.activityNames}%`
                         }
                         if (CheckParams.id) {
                             const responseUpdate =  await UpdateCriteria(data)
@@ -92,13 +110,35 @@ export const CriteriaComponent = props => {
                                 placeholder="Country code"
                             />
                             <Titlesub>Type of Pax</Titlesub>
+                            <div style={{ borderBottom: '1px solid #E9E9E9' }}>
+                                <Checkbox
+                                indeterminate={indeterminate}
+                                onChange={onCheckAllChange}
+                                checked={checkAll}
+                                >
+                                Check all
+                            </Checkbox>
+                            </div>
+                            <CheckboxGroup 
+                            options={paxTypesMap}
+                            value={checkedList}
+                            onChang={onChange}
+                            />
+                            {/* <div style={{ borderBottom: '1px solid #E9E9E9' }}>
+                                 <Radio
+                                
+                                 >
+                                 CheckAll
+                                </Radio>
+                            </div>
+                           
                             <Field
                                 name="paxTypes"
                                 component={FieldCheckboxInput}
                                 value={props.values.paxTypes}
                                 onChange={props.handleChange}
                                 data={paxTypesMap}
-                            />
+                            /> */}
                             <Titlesub>Activity Name</Titlesub>
                             <Field
                                 name="activityNames"

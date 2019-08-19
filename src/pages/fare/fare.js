@@ -1,5 +1,5 @@
 import React from 'react'
-import FareComponent from '../../components/fare/farePage';
+import FareComponent  from '../../components/fare/farePage';
 import { HomeLayout } from '../../components/layout/home-layout';
 
 
