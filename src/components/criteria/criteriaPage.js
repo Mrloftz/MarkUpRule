@@ -8,13 +8,17 @@ import { Button, Checkbox } from 'antd'
 const defaultCheckedList = ["adult"];
 export const CriteriaComponent = props => {
     const [name, setName] = useState()
-    const [destinations, setDestinations] = useState()
-    const [countries, SetCountries] = useState()
-    const [paxTypes, setPaxTypes] = useState([{ id: 0, label: 'adult', value: 0, }, { id: 1, label: 'child', value: '1' }, { id: 2, label: 'infant', value: 2 }])
+    const [destinations, setDestinations] = useState([])
+    const [countries, SetCountries] = useState([])
+    const [paxTypes, setPaxTypes] = useState(
+    
+    ['adult', 'child', 'infant']
+    )
     // const [paxTypes, setPaxTypes] = useState(paxTypesMap)
-    const [activityNames, setActivityNames] = useState()
+    const [activityNames, setActivityNames] = useState([])
     const [checkAll, setCheckAll] = useState(false)
-    const [checkedList, setCheckedList] = useState(defaultCheckedList)
+
+    const [checkedList, setcheckedList] = useState([])
     // const [defaultCheckedList, setDefaultCheckedList] = useState(["adult"])
     const [indeterminate, setIndeterminate] = useState(true)
 
@@ -25,19 +29,34 @@ export const CriteriaComponent = props => {
     const { history } = props
 
     const onChange = checkedList => {
-        this.setState({
-            checkedList,
-            indeterminate: 
-            !!checkedList.length && checkedList.length < paxTypes.length,
-            checkAll: checkedList.length === paxTypes.length,
-        });
+        setCheckAll(checkedList.length === paxTypes.length)
+    
+
+        setcheckedList(checkedList)
+
+        console.log(checkedList)
+
     }
     const onCheckAllChange = e => {
-        this.setState({
-            checkedList: e.target.checked ? paxTypes : [],
-            indeterminate: false,
-            checkAll: e.target.checked,
-          });
+
+
+        if (e.target.checked) {
+            setcheckedList(paxTypes)
+        } else {
+            setcheckedList([])
+        }
+
+        setCheckAll(e.target.checked)
+
+
+        // this.setState({
+        //     checkedList: e.target.checked ? paxTypes : [],
+        //     indeterminate: false,
+        //     checkAll: e.target.checked,
+        //   });
+
+
+        console.log(e)
     }
     useEffect(() => {
         const fetchData = async id => {
@@ -65,17 +84,18 @@ export const CriteriaComponent = props => {
                         destinations,
                         countries,
                         paxTypes,
+                        checkedList,
                         activityNames,
                     }}
-                    enableReinitialize={true}
+                    // enableReinitialize={true}
                     validate={ValidateSchema}
                     onSubmit={async formValues => {
                         let data = {
                             name: formValues.name,
-                            destinations: formValues.destinations,
-                            countries: formValues.countries,
-                            paxTypes: formValues.paxTypes,
-                            activityNames: `%${formValues.activityNames}%`
+                            destinations: [formValues.destinations],
+                            countries: [formValues.countries],
+                            paxTypes: checkedList,
+                            activityNames: [`%${formValues.activityNames}%`]
                         }
                         if (CheckParams.id) {
                             const responseUpdate =  await UpdateCriteria(data)
@@ -84,7 +104,7 @@ export const CriteriaComponent = props => {
                             const responseCreate = await CriteriaCreate(data)
                             console.log(responseCreate)
                         }
-                        history.push('/')
+                        // history.push('/')
                     }}
                     render={props => (
                         <form onSubmit={props.handleSubmit}>
@@ -116,7 +136,6 @@ export const CriteriaComponent = props => {
 
                             <div style={{ borderBottom: '1px solid #E9E9E9' }}>
                                 <Checkbox
-                                indeterminate={indeterminate}
                                 onChange={onCheckAllChange}
                                 checked={checkAll}
                                 >
@@ -125,8 +144,8 @@ export const CriteriaComponent = props => {
                             </div>
                             <CheckboxGroup 
                             options={paxTypes}
-                            // value={checkedList}
-                            onChang={onChange}
+                            value={checkedList}
+                            onChange={onChange}
                             />
                             {/* <div style={{ borderBottom: '1px solid #E9E9E9' }}>
                                  <Radio

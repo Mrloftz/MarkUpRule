@@ -18,8 +18,8 @@ class TableMarkUpRule extends React.Component {
     }
     this.columns = [
       {
-        title: 'FareName',
-        dataIndex: 'fare.name',
+        title: 'Name',
+        dataIndex: 'name',
         key: 'name'
       },
       {
