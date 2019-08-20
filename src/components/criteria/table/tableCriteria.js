@@ -22,27 +22,27 @@ class TableCriteria extends React.Component {
             {
                 title: 'Name',
                 dataIndex: 'name',
-                key: ''
+                key: 'name'
             },
             {
                 title: 'Departure',
                 dataIndex: 'destinations',
-                key: ''
+                key: 'destinations'
             },
             {
                 title: 'Country Code',
                 dataIndex: 'countries',
-                key: ''
+                key: 'countries'
             },
             {
                 title: 'Type of Pax',
                 dataIndex: 'paxTypes',
-                key: ''
+                key: 'paxTypes'
             },
             {
                 title: 'Activity Name',
                 dataIndex: 'activityNames',
-                key: ''
+                key: 'activityNames'
             },
             {
                 title: 'Edit',

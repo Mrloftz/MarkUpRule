@@ -9,7 +9,6 @@ class MarkUpRuleComponent extends React.Component {
         super(props)
         this.state = {
             criteria: [],
-            clearable: true,
             selectedOption: '',
         }
     }
@@ -43,10 +42,8 @@ class MarkUpRuleComponent extends React.Component {
                     name="form-field-name"
                     value={this.state.value} 
                     onChange={this.handleChange}
-                    valueKey={'id'}
-                    labelKey={'name'}
-                    clearable={this.state.clearable}
                     options={this.state.criteria}
+                    style={{ display: 'block' }}
                     />
                 </label>
             </form>
@@ -56,40 +53,3 @@ class MarkUpRuleComponent extends React.Component {
 
 export default MarkUpRuleComponent
 
-
-// export const MarkUpRuleComponent = props => {
-//     const [name, setName] = useState()
-//     const [fareId, setFareId] = useState()
-//     const [criteriaId, setCriteriaId] = useState()
-//     const [startDateTime, setStartDateTime] = useState()
-//     const [endDateTime, setEndDateTime] = useState()
-//     const [value, setValue] = useState()
-//     const CheckParams = props.params
-
-//     useEffect(() => {
-//         const fetchData = async id => {
-//             const { data } = await GetMarkupRule(id)
-//             console.log(data)
-//             setName(data.name)
-//         }
-//         if (CheckParams.id) {
-//             fetchData(CheckParams.id)
-//         }
-
-//     }, [CheckParams.id])
-//     return (
-//         <React.Fragment>
-//             <form>
-//                 <h3>Criteria</h3>
-//             <label>
-//                 Pick your fav:
-//                 <select value={this.state.value} onChange="this.handleChange">
-//                     <option value="" ></option>
-//                 </select>
-//             </label>
-//             </form>
-
-
-//         </React.Fragment>
-//     )
-// }

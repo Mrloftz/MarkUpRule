@@ -10,4 +10,6 @@ export const ValidateSchema = Yup.object().shape({
     countries: Yup.string().required('Required'),
     paxTypes: Yup.array().required('Required'),
     activityNames: Yup.string().required('Required')
+
+    //select: yup.string().required('Select is required')
 })

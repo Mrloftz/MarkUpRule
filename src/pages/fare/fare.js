@@ -5,12 +5,10 @@ import { HomeLayout } from '../../components/layout/home-layout';
 
 class FarePage extends React.Component {
     render() {
-        // const params = this.props.match.params
-        console.log(this.props)
-        // console.log(this.props)params={params}
+        const params = this.props.match.params
         return(
             <HomeLayout>
-            <FareComponent />
+            <FareComponent params={params}/>
             </HomeLayout>
      
         )

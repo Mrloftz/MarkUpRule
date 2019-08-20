@@ -5,33 +5,36 @@ import { ValidateSchema } from '../../helper/validator'
 import styled from 'styled-components'
 import { GetCriteria, DeleteCriteria, UpdateCriteria, CriteriaCreate } from '../../_service/MethodApi';
 import { Button, Checkbox } from 'antd'
-import CheckboxGroup from 'antd/lib/checkbox/Group';
-
+const defaultCheckedList = ["adult"];
 export const CriteriaComponent = props => {
     const [name, setName] = useState()
     const [destinations, setDestinations] = useState()
     const [countries, SetCountries] = useState()
-    const [paxTypesMap, setPaxTypesMap] = useState([{ id: 0, label: 'adult', value: 0, }, { id: 1, label: 'child', value: '1' }, { id: 2, label: 'infant', value: 2 }])
-    const [paxTypes, setPaxTypes] = useState(paxTypesMap)
-    const [activityNames, setActivityNames] = useState('%%')
+    const [paxTypes, setPaxTypes] = useState([{ id: 0, label: 'adult', value: 0, }, { id: 1, label: 'child', value: '1' }, { id: 2, label: 'infant', value: 2 }])
+    // const [paxTypes, setPaxTypes] = useState(paxTypesMap)
+    const [activityNames, setActivityNames] = useState()
     const [checkAll, setCheckAll] = useState(false)
+    const [checkedList, setCheckedList] = useState(defaultCheckedList)
+    // const [defaultCheckedList, setDefaultCheckedList] = useState(["adult"])
     const [indeterminate, setIndeterminate] = useState(true)
-    const [checkedList, setCheckedList] = useState('adult')
 
+
+
+    const CheckboxGroup = Checkbox.Group;
     const CheckParams = props.params
-    console.log(CheckParams)
     const { history } = props
 
     const onChange = checkedList => {
         this.setState({
             checkedList,
-            indeterminate: !!checkedList.length && checkedList.length < paxTypesMap.length,
-            checkAll: checkedList.length === paxTypesMap.length,
+            indeterminate: 
+            !!checkedList.length && checkedList.length < paxTypes.length,
+            checkAll: checkedList.length === paxTypes.length,
         });
     }
     const onCheckAllChange = e => {
         this.setState({
-            checkedList: e.target.checked ? paxTypesMap : [],
+            checkedList: e.target.checked ? paxTypes : [],
             indeterminate: false,
             checkAll: e.target.checked,
           });
@@ -43,7 +46,7 @@ export const CriteriaComponent = props => {
             setName(data.name)
             setDestinations(data.destination)
             SetCountries(data.country)
-            setPaxTypes(data.paxType.label)
+            setPaxTypes(data.paxTypes)
             setActivityNames(data.activityName)
         }
         if (CheckParams.id) {
@@ -110,6 +113,7 @@ export const CriteriaComponent = props => {
                                 placeholder="Country code"
                             />
                             <Titlesub>Type of Pax</Titlesub>
+
                             <div style={{ borderBottom: '1px solid #E9E9E9' }}>
                                 <Checkbox
                                 indeterminate={indeterminate}
@@ -120,8 +124,8 @@ export const CriteriaComponent = props => {
                             </Checkbox>
                             </div>
                             <CheckboxGroup 
-                            options={paxTypesMap}
-                            value={checkedList}
+                            options={paxTypes}
+                            // value={checkedList}
                             onChang={onChange}
                             />
                             {/* <div style={{ borderBottom: '1px solid #E9E9E9' }}>

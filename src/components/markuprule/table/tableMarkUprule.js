@@ -19,32 +19,32 @@ class TableMarkUpRule extends React.Component {
     this.columns = [
       {
         title: 'FareName',
-        dataIndex: 'name',
+        dataIndex: 'fare.name',
         key: 'name'
       },
       {
         title: 'Criteria',
-        dataIndex: '',
+        dataIndex: 'criteria.name',
         key: '',
       },
       {
         title: 'Destinations',
-        dataIndex: '',
+        dataIndex: 'criteria.destination',
         key: '',
       },
       {
         title: 'Country Code',
-        dataIndex: '',
+        dataIndex: 'criteria.country',
         key: '',
       },
       {
         title: 'Type of Pax',
-        dataIndex: '',
+        dataIndex: 'criteria.paxTypes',
         key: '',
       },
       {
         title: 'Activity Name',
-        dataIndex: '',
+        dataIndex: 'criteria.activityName',
         key: '',
       },
       {
