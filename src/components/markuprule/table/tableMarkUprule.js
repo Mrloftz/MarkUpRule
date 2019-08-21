@@ -76,11 +76,11 @@ class TableMarkUpRule extends React.Component {
     console.log(dataSource)
     this.setState({ dataSource: dataSource.data })
   }
-  // handleDelete = async id => {
-  //     // e.preventDefault()
-  //     await Del(id)
-  //     this.setState({ dataSource: this.state.dataSource.filter(item => item.id !== id) })
-  //   }
+  handleDelete = async id => {
+      // e.preventDefault()
+      // await De(id)
+      // this.setState({ dataSource: this.state.dataSource.filter(item => item.id !== id) })
+    }
   handleSearch = async value => {
     //axios get search api
     const dataSource = await GetListMarkupRule(value)
@@ -115,11 +115,8 @@ class TableMarkUpRule extends React.Component {
             rowKey="id"
           />
         </ContainarSub>
-
       </div>
-
     )
-
   }
 }
 

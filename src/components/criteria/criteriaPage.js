@@ -1,67 +1,41 @@
 import React, { useState, useEffect } from 'react'
 import { Formik, Field } from 'formik'
-import { FieldInput, FieldCheckboxInput } from '../../components/input'
+import { FieldInput } from '../../components/input'
 import { ValidateSchema } from '../../helper/validator'
 import styled from 'styled-components'
 import { GetCriteria, DeleteCriteria, UpdateCriteria, CriteriaCreate } from '../../_service/MethodApi';
 import { Button, Checkbox } from 'antd'
-const defaultCheckedList = ["adult"];
 export const CriteriaComponent = props => {
     const [name, setName] = useState()
     const [destinations, setDestinations] = useState([])
     const [countries, SetCountries] = useState([])
     const [paxTypes, setPaxTypes] = useState(
-    
     ['adult', 'child', 'infant']
     )
-    // const [paxTypes, setPaxTypes] = useState(paxTypesMap)
     const [activityNames, setActivityNames] = useState([])
     const [checkAll, setCheckAll] = useState(false)
-
     const [checkedList, setcheckedList] = useState([])
-    // const [defaultCheckedList, setDefaultCheckedList] = useState(["adult"])
     const [indeterminate, setIndeterminate] = useState(true)
-
-
-
     const CheckboxGroup = Checkbox.Group;
     const CheckParams = props.params
     const { history } = props
 
     const onChange = checkedList => {
         setCheckAll(checkedList.length === paxTypes.length)
-    
-
         setcheckedList(checkedList)
-
         console.log(checkedList)
-
     }
     const onCheckAllChange = e => {
-
-
         if (e.target.checked) {
             setcheckedList(paxTypes)
         } else {
             setcheckedList([])
         }
-
         setCheckAll(e.target.checked)
-
-
-        // this.setState({
-        //     checkedList: e.target.checked ? paxTypes : [],
-        //     indeterminate: false,
-        //     checkAll: e.target.checked,
-        //   });
-
-
-        console.log(e)
     }
     useEffect(() => {
         const fetchData = async id => {
             const { data }  = await GetCriteria(id)
-            console.log(data)
             setName(data.name)
             setDestinations(data.destination)
             SetCountries(data.country)
@@ -71,7 +45,6 @@ export const CriteriaComponent = props => {
         if (CheckParams.id) {
             fetchData(CheckParams.id)
         }
-
     },[CheckParams.id])
 
     return (
@@ -87,7 +60,7 @@ export const CriteriaComponent = props => {
                         checkedList,
                         activityNames,
                     }}
-                    // enableReinitialize={true}
+                    enableReinitialize={true}
                     validate={ValidateSchema}
                     onSubmit={async formValues => {
                         let data = {
@@ -133,7 +106,6 @@ export const CriteriaComponent = props => {
                                 placeholder="Country code"
                             />
                             <Titlesub>Type of Pax</Titlesub>
-
                             <div style={{ borderBottom: '1px solid #E9E9E9' }}>
                                 <Checkbox
                                 onChange={onCheckAllChange}

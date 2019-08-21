@@ -97,6 +97,7 @@ class TableCriteria extends React.Component {
                         />
                     </ContainSearch>
                     <TableWrapper
+                        rowKey="id"
                         style={{ marginTop: '2rem' }}
                         columns={columns}
                         dataSource={this.state.dataSource}
@@ -107,7 +108,6 @@ class TableCriteria extends React.Component {
                             defaultPageSize: 10,
                             showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                         }}
-                        rowkey="id"
                     />
                 </ContainarSub>
             </div>

@@ -36,6 +36,10 @@ class SideNav extends React.Component {
                   <Icon type="desktop" />
                   <span>Mark up Rule</span>
                 </Menu.Item>
+                <Menu.Item key="booking">
+                  <Icon type="desktop" />
+                  <span>Booking</span>
+                </Menu.Item>
               </Menu>
             </Sider>
             <Layout>

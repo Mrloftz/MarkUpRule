@@ -1,16 +1,320 @@
 import React, { useState, useEffect } from 'react'
 import 'antd/dist/antd.css';
-import { Table, Input, Button, Popconfirm, Form } from 'antd';
+import { Table, Input, Button, Popconfirm, Form, InputNumber } from 'antd';
 import styled from 'styled-components'
-import { GetFare, GetFareAll, DeleteFare } from '../../_service/MethodApi';
+import { GetFare, GetFareAll, DeleteFare, UpdateFare } from '../../_service/MethodApi';
 import axios from 'axios';
 
-const EditTableContext = React.createContext();
+// const FormItem = Form.Item;
+// const EditableContext = React.createContext();
+
+// const EditableRow = ({ form, index, ...props }) => (
+//     <EditableContext.Provider value={form}>
+//         <tr {...props} />
+//     </EditableContext.Provider>
+// );
+
+// const EditableFormRow = Form.create()(EditableRow);
+
+// class EditableCell extends React.Component {
+//     getInput = () => {
+//         if (this.props.inputType === 'number') {
+//             return <InputNumber />;
+//         }
+//         return <Input />;
+//     }
+
+//     render() {
+//         const {
+//             editing,
+//             dataIndex,
+//             title,
+//             inputType,
+//             record,
+//             index,
+//             ...restProps
+//         } = this.props;
+//         return (
+//             <EditableContext.Consumer>
+//                 {(form) => {
+//                     const { getFieldDecorator } = form;
+//                     return (
+//                         <td {...restProps}>
+//                             {editing ? (
+//                                 <FormItem style={{ margin: 0 }}>
+//                                     {getFieldDecorator(dataIndex, {
+//                                         rules: [{
+//                                             required: true,
+//                                             message: `Please Input ${title}!`,
+//                                         }],
+//                                         initialValue: record[dataIndex],
+//                                     })(this.getInput())}
+//                                 </FormItem>
+//                             ) : restProps.children}
+//                         </td>
+//                     );
+//                 }}
+//             </EditableContext.Consumer>
+//         );
+//     }
+// }
+
+// class FareComponent extends React.Component {
+//     constructor(props) {
+//         super(props);
+//         this.state = { fareItem: [], editingKey: '' };
+//         this.columns = [
+//             {
+//                 title: 'From',
+//                 dataIndex: 'priceFrom',
+//                 editable: true,
+//             },
+//             {
+//                 title: 'To',
+//                 dataIndex: 'priceTo',
+//                 editable: true,
+//             },
+//             {
+//                 title: 'Type',
+//                 dataIndex: 'markupType',
+//                 editable: true,
+//             },
+//             {
+//                 title: 'Rate',
+//                 dataIndex: 'markupRate',
+//                 editable: true,
+//             },
+//             {
+//                 title: 'Operation',
+//                 dataIndex: 'operation',
+//                 render: (text, record) => {
+//                     const editable = this.isEditing(record);
+//                     return (
+//                         <div>
+//                             {editable ? (
+//                                 <span>
+//                                     <EditableContext.Consumer>
+//                                         {form => (
+//                                             <a
+//                                                 onClick={() => this.save(form, record.id)}
+//                                                 style={{ marginRight: 8 }}
+//                                             >
+//                                                 Save
+//                                             </a>
+//                                         )}
+//                                     </EditableContext.Consumer>
+//                                     <Popconfirm
+//                                         title="Sure to calcel?"
+//                                         onConfirm={() => this.cancel(record.id)}
+//                                     >
+//                                         <a>cancel</a>
+//                                     </Popconfirm>
+//                                 </span>
+//                             ) : (
+//                                     <a onClick={() => this.edit(record.id)}>Edit</a>
+//                                 )}
+//                         </div>
+//                     );
+//                 },
+//             },
+//         ];
+//     }
+
+//     handlePriceFrom = e => {
+//         this.setState({ priceFrom: e.target.value })
+//     }
+//     handlePriceTo = e => {
+//         this.setState({ priceTo: e.target.value })
+//     }
+//     handleMarkupType = e => {
+//         this.setState({ markupType: e.target.value })
+//     }
+//     handleMarkupRate = e => {
+//         this.setState({ markupRate: e.target.value })
+//     }
+//     handleFareName = e => {
+//         this.setState({ name: e.target.value })
+//     }
+
+//     handleSubmit = e => {
+//         e.preventDefault();
+//         UpdateFare({
+//             id: this.state.id,
+//             name: this.state.name,
+//             fareDetails: [
+//                 {
+//                     id: this.state.id,
+//                     fareId: this.state.fareId,
+//                     priceFrom: this.state.priceFrom,
+//                     priceTo: this.state.priceTo,
+//                     markupType: this.state.markupType,
+//                     markupRate: this.state.markupRate,
+//                     updateType: this.state.updateType,
+//                 }
+//             ]
+//         })
+//     }
+
+//     componentDidMount() {
+//         //   const res = GetFare(CheckParams.id)
+//         //   axios.get(`http://travizgo.dosetech.co:7799/fare/${id}`)
+//         //   .then(res => {
+//         //   this.setState({ fareItem: res.data })
+//     }
+
+//     handleAdd = () => {
+//         const { fareItem } = this.state
+//         const newData = {
+//             priceForm: '',
+//             priceTo: '',
+//             markupType: '',
+//             markupRate: '',
+//         }
+//         this.state({
+//             fareItem: [...fareItem, newData]
+//         })
+//     }
+
+//     isEditing = (record) => {
+//         return record.id === this.state.editingKey;
+//     }
+
+//     edit(id) {
+//         console.log('fareItem', this.state.fareItem.id);
+//     }
+
+//     save(form, id) {
+//         console.log('key', id)
+//         form.validateFields((error, row) => {
+//             if (error) {
+//                 return;
+//             }
+//             const newData = [...this.state.fareItem];
+//             const index = newData.findIndex(item => id === item.id);
+//             if (index > -1) {
+//                 const item = newData[index];
+//                 newData.splice(index, 1, { ...item, ...row });
+//                 this.setState({ fareItem: newData, editingKey: '' })
+//                 console.log('newData', newData[index]) // data update to api
+//             } else {
+//                 newData.push(this.state.fareItem);
+//                 this.setState({ fareItem: newData, editingKey: '' })
+//             }
+//         })
+//     }
+
+//     cancel = () => {
+//         this.setState({ editingKey: '' });
+//     }
+
+//     render() {
+//         const components = {
+//             body: {
+//                 row: EditableFormRow,
+//                 cell: EditableCell,
+//             }
+//         }
+//         const columns = this.columns.map((col) => {
+//             if (!col.editable) {
+//                 return col;
+//             }
+//             return {
+//                 ...col,
+//                 onCell: record => ({
+//                     record,
+//                     inputType: col.dataIndex === 'priceForm' ? 'number' : 'text',
+//                     dataIndex: col.dataIndex,
+//                     title: col.title,
+//                     editing: this.isEditing(record),
+//                 }),
+//             };
+//         });
+
+//         return (
+//             <div>
+//                 <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
+//                     Add a row
+//             </Button>
+//                 <Table
+//                     rowKey={this.state.id}
+//                     components={components}
+//                     bordered
+//                     dataSource={this.state.fareItem}
+//                     columns={columns}
+//                     rowClassName="editable-row"
+//                 />
+//             </div>
+
+//         );
+//     }
+// }
+// export default FareComponent
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const FormItem = Form.Item;
+const EditableContext = React.createContext();
 
 const EditTableRow = ({ form, index, ...props }) => (
-    <EditTableContext.Provider value={form}>
+    <EditableContext.Provider value={form}>
         <tr {...props} />
-    </EditTableContext.Provider>
+    </EditableContext.Provider>
 );
 
 const EditableFormRow = Form.create()(EditTableRow);
@@ -26,8 +330,8 @@ class EditableCell extends React.Component {
             if (editing) {
                 this.input.focus();
             }
-        })
-    }
+        });
+    };
 
     save = e => {
         const { record, handleSave } = this.props;
@@ -41,7 +345,7 @@ class EditableCell extends React.Component {
     };
 
     renderCell = form => {
-        this.form = form
+        this.form = form;
         const { children, dataIndex, record, title } = this.props;
         const { editing } = this.state;
         return editing ? (
@@ -80,7 +384,7 @@ class EditableCell extends React.Component {
         return (
             <td {...restProps}>
                 {editable ? (
-                    <EditTableContext.Consumer>{this.renderCell}</EditTableContext.Consumer>
+                    <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
                 ) : (
                         children
                     )}
@@ -96,25 +400,21 @@ class FareComponent extends React.Component {
             {
                 title: 'From',
                 dataIndex: 'priceFrom',
-                key: 'priceFrom',
                 editable: true,
             },
             {
                 title: 'To',
                 dataIndex: 'priceTo',
-                key: 'priceTo',
                 editable: true,
             },
             {
                 title: 'Type',
                 dataIndex: 'markupType',
-                key: 'markupType',
                 editable: true,
             },
             {
                 title: 'Rate',
                 dataIndex: 'markupRate',
-                key: 'markupRate',
                 editable: true,
             },
             {
@@ -122,32 +422,39 @@ class FareComponent extends React.Component {
                 dataIndex: 'delete',
                 render: (text, record) =>
                     this.state.dataSource.length >= 1 ? (
-                        <Popconfirm title="Sure to delete" onConfirm={() => this.handleDelete(record.id)}>
+                        <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
                             <a>Delete</a>
                         </Popconfirm>
                     ) : null,
             },
-        ]
+        ];
         this.state = {
-            dataSource: []
+            dataSource: [
+                {
+                    key: '0',
+                    priceFrom: '0',
+                    priceTo: '0',
+                    markupType: 'Input Your Type',
+                    markupRate: '0',
+                },
+            ],
+            count: 2,
         }
     }
-    async componentDidMount() {
 
-    }
-
-    handleDelete = id => {
+    handleDelete = key => {
         const dataSource = [...this.state.dataSource];
-        this.setState({ dataSource: dataSource.filter(item => item.id !== id) });
+        this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
     };
 
     handleAdd = () => {
         const { count, dataSource } = this.state;
         const newData = {
-            priceFrom: "Input your Value",
-            priceTo: "Input your Value",
-            markupType: "Input your Type",
-            markupRate: "Input your Rate",
+            key: count,
+            priceFrom: 0,
+            priceTo: 0,
+            markupType: `Input Your Type ${count}`,
+            markupRate: '0',
         };
         this.setState({
             dataSource: [...dataSource, newData],
@@ -157,13 +464,13 @@ class FareComponent extends React.Component {
 
     handleSave = row => {
         const newData = [...this.state.dataSource];
-        const index = newData.findIndex(item => row.id === item.id)
+        const index = newData.findIndex(item => row.key === item.key);
         const item = newData[index];
         newData.splice(index, 1, {
             ...item,
-            ...row
+            ...row,
         });
-        this.setState({ dataSource: newData })
+        this.setState({ dataSource: newData });
     };
 
     render() {
@@ -171,8 +478,8 @@ class FareComponent extends React.Component {
         const components = {
             body: {
                 row: EditableFormRow,
-                cell: EditableCell
-            }
+                cell: EditableCell,
+            },
         };
         const columns = this.columns.map(col => {
             if (!col.editable) {
@@ -185,40 +492,36 @@ class FareComponent extends React.Component {
                     editable: col.editable,
                     dataIndex: col.dataIndex,
                     title: col.title,
-                    handleSave: this.handleSave
-                })
+                    handleSave: this.handleSave,
+                }),
             };
         });
         return (
             <div>
                 <ContainarSub>
-                    <Button
-                        onClick={this.handleAdd}
-                        type="primary"
-                        style={{ marginBottom: 16 }}
-                    >
+                    <h1>Fare</h1>
+                    <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
                         Add a row
-                </Button>
+            </Button>
+                    <Input placeholder="Input your table name" style={{ width: 'fit-content', marginLeft: '10px'}}/>
                     <TableWrapper
                         components={components}
-                        rowClassName={() => "editable-row"}
+                        rowClassName={() => 'editable-row'}
                         bordered
                         dataSource={dataSource}
                         columns={columns}
-                        rowKey="id"
                     />
-                    <ContainerButton>
-                        <Button type="danger" onCick={() => DeleteFare()}>
-                            Remove
-                            </Button>
-                        <Button type="primary" htmlType="submit">
-                            Save
-                            </Button>
-                    </ContainerButton>
                 </ContainarSub>
-
+                <ContainerButton>
+                    <Button type="danger">
+                        Remove
+                </Button>
+                    <Button type="primary">
+                        Save
+                </Button>
+                </ContainerButton>
             </div>
-        )
+        );
     }
 }
 

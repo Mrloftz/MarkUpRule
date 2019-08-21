@@ -3,6 +3,7 @@ import TableFare from '../../components/fare/table/tableFare';
 import TableCriteria from '../../components/criteria/table/tableCriteria'
 import TableMarkUpRule from '../../components/markuprule/table/tableMarkUprule';
 import { HomeLayout } from '../../components/layout/home-layout';
+import TableBooking from '../../components/booking/table/tableBooking';
 class HomePage extends React.Component {
     state = {
         key : 'fare'
@@ -19,6 +20,7 @@ class HomePage extends React.Component {
                     {key === 'fare' && <TableFare />}
                     {key === 'criteria' && <TableCriteria />}
                     {key === 'markuprule' && <TableMarkUpRule />}
+                    {key === 'bookking' && <TableBooking/>}
 
             </HomeLayout>
          
