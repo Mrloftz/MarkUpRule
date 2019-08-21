@@ -53,28 +53,34 @@ class MarkUpRuleComponent extends React.Component {
     handleInput = (e) => {
         this.setState({ nameMarkupRule: e.target.value })
     }
-    onSelectChange({ value }) {
+    onSelectChange({ value }, key) {
+
         console.log(value)
+        // console.log(value)
+        // console.log(fare.fareDetails)
+
+        if (key === 1) {
+        const criteria = value
+
+            this.setState({
+                name: criteria.name,
+                destinations: criteria.destinations,
+                countries: criteria.countries,
+                paxTypes: criteria.paxTypes,
+                activityNames: criteria.activityNames,
+                criteriaId: criteria.id
+            })
+        } else {
         const fare = value
-        console.log(fare.fareDetails)
         this.setState({
             fareData: fare.fareDetails,
-            fareId: fare.id
-            // markupType: fare.markupType,
-            // markupRate: fare.markupRate,
-            // priceFrom: fare.priceFrom,
-            // priceTo: fare.priceTo
+            fareId: fare.id,
+            markupRate: fare.markupRate,
+            priceFrom: fare.priceFrom,
+            priceTo: fare.priceTo
         })
-        const criteria = value
-        console.log(criteria)
-        this.setState({
-            name: criteria.name,
-            destinations: criteria.destinations,
-            countries: criteria.countries,
-            paxTypes: criteria.paxTypes,
-            activityNames: criteria.activityNames,
-            criteriaId: criteria.id
-        })
+        }
+        // console.log(criteria)
     }
     submitForm() {
         alert('จัดไปดิคั่บ')
@@ -94,25 +100,26 @@ class MarkUpRuleComponent extends React.Component {
                 <div className="row">
                     <div className="col-md-4"></div>
                     <div className="col-md-4">
-                        <Select options={selectCriteriaData} onChange={(e) => this.onSelectChange(e)} />
+                        <Select options={selectCriteriaData} onChange={(e) => this.onSelectChange(e, 1)} />
                         <h1 style={{ textAlign: "center" }}>Criteria</h1>
                     </div>
                     <div className="col-md-4"></div>
                 </div>
-                <Titlesub>Destinations: {this.state.destinations}</Titlesub>
+                     <Titlesub>Destinations: {this.state.destinations}</Titlesub>
                 <Titlesub>Country Code: {this.state.countries}</Titlesub>
                 <Titlesub>Type of Pax: {this.state.paxTypes}</Titlesub>
                 <Titlesub>Activity Name: {this.state.activityNames}</Titlesub>
+
                 <br />
                 <div className="row">
                     <div className="col-md-4"></div>
                     <div className="col-md-4">
-                        <Select options={selectFareData} onChange={(e) => this.onSelectChange(e)} />
+                        <Select options={selectFareData} onChange={(e) => this.onSelectChange(e, 2)} />
                         <h1 style={{ textAlign: "center" }}>Fare</h1>
                     </div>
                     <div className="col-md-4"></div>
                 </div>
-                {
+                     {
                     this.state.fareData.map((fare, index) => {
                         return <React.Fragment key={index}>
                             <Titlesub>From: {fare.priceFrom}</Titlesub>
@@ -123,8 +130,6 @@ class MarkUpRuleComponent extends React.Component {
                         </React.Fragment>
                     })
                 }
-
-
                 <br />
                 <div>
                     <TextArea type="text" name="nameMarkupRule" value={this.state.nameMarkupRule} onChange={this.handleInput} placeholder="กรุณาใส่รายละเอียดฟอร์ม" autosize />
