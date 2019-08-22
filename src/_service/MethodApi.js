@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { async } from 'q';
 
 
 const base_url = 'http://travizgo.dosetech.co:7799'
@@ -212,6 +213,18 @@ export const CreateMarkupRule = data => {
     })
 }
 
+// Update Mark up rule
+export const UpdateMarkUpRule = data => {
+    return axios
+    .put(base_url + '/markupRule', data)
+    .then(response => {
+        return response
+    })
+    .catch(error => {
+        return error
+    })
+}
+
 // Get All MarkupType 
 export const GetAllMarkupType = async () => {
     return axios
@@ -236,3 +249,12 @@ export const GetAllpaxType = async () => {
         return error
     })
 }
+
+
+// Booking API
+
+// Get Booking Details
+// export const GetBookingAll = async () => {
+//     return axios
+//     .get(base_url + '/booking')
+// }

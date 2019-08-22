@@ -1,12 +1,10 @@
 import React from 'react'
 import Select from 'react-select';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { GetAllMarkUpRule, CreateMarkupRule, GetCriteriaAll, GetFareAll } from '../../_service/MethodApi';
+import { GetAllMarkUpRule, CreateMarkupRule, GetCriteriaAll, GetFareAll, GetCriteria, GetFare, GetMarkupRule, UpdateCriteria } from '../../_service/MethodApi';
 import styled from 'styled-components'
 import { DatePicker, Button, Input } from 'antd'
 import moment from 'moment'
-import axios from 'axios';
-
 
 const { TextArea } = Input;
 class MarkUpRuleComponent extends React.Component {
@@ -14,7 +12,7 @@ class MarkUpRuleComponent extends React.Component {
         data: [],
         fareData: [],
         startDateTime: moment(),
-        endDateTime: moment(),
+        endDateTime: moment().add(1, 'days'),
         nameMarkupRule: '',
         fareId: '',
         criteriaId: '',
@@ -29,6 +27,8 @@ class MarkUpRuleComponent extends React.Component {
         name: '',
     }
     async componentDidMount() {
+        const CheckParams = this.props.params
+        console.log(CheckParams.id)
         const dataCriteria = await GetCriteriaAll()
         const selectCriteriaData = dataCriteria.data.map(value => {
             return {
@@ -45,6 +45,22 @@ class MarkUpRuleComponent extends React.Component {
             selectCriteriaData,
             selectFareData,
         })
+        const DataMarkupRule = await GetMarkupRule(CheckParams.id)
+        console.log(DataMarkupRule.data)
+        this.setState({
+            criteriaId: DataMarkupRule.data.criteria.criteriaId,
+            destinations: DataMarkupRule.data.criteria.destinations,
+            countries: DataMarkupRule.data.criteria.countries,
+            paxTypes: DataMarkupRule.data.criteria.paxTypes,
+            activityNames: DataMarkupRule.data.criteria.activityNames,
+            fareData: DataMarkupRule.data.fare.fareDetails,
+            fareId: DataMarkupRule.data.fare.fareId,
+            priceFrom: DataMarkupRule.data.fare.priceFrom,
+            priceTo: DataMarkupRule.data.fare.priceTo,
+            nameMarkupRule: DataMarkupRule.data.name,
+            // startDateTime: DataMarkupRule.data.startDateTime,
+            // endDateTime: DataMarkupRule.data.endDateTime
+        })
     }
     handleDateChange = (e, key) => {
         console.log(e, key)
@@ -54,11 +70,7 @@ class MarkUpRuleComponent extends React.Component {
         this.setState({ nameMarkupRule: e.target.value })
     }
     onSelectChange({ value }, key) {
-
         console.log(value)
-        // console.log(value)
-        // console.log(fare.fareDetails)
-
         if (key === 1) {
         const criteria = value
 
@@ -80,17 +92,30 @@ class MarkUpRuleComponent extends React.Component {
             priceTo: fare.priceTo
         })
         }
-        // console.log(criteria)
     }
-    submitForm() {
+    async submitForm() {
         alert('จัดไปดิคั่บ')
-        CreateMarkupRule({
+        const CheckParams = this.props.params
+        let data = {
             name: this.state.nameMarkupRule,
             fareId: this.state.fareId,
             criteriaId: this.state.criteriaId,
             startDateTime: moment(this.state.startDateTime).format('YYYY-MM-DD'),
             endDateTime: moment(this.state.endDateTime).format('YYYY-MM-DD'),
-        })
+        }
+        if (CheckParams.id) {
+            data = {...data, id: CheckParams.id } 
+            await UpdateCriteria(data)
+        } else {
+            await CreateMarkupRule(data)
+        }
+        // CreateMarkupRule({
+        //     name: this.state.nameMarkupRule,
+        //     fareId: this.state.fareId,
+        //     criteriaId: this.state.criteriaId,
+        //     startDateTime: moment(this.state.startDateTime).format('YYYY-MM-DD'),
+        //     endDateTime: moment(this.state.endDateTime).format('YYYY-MM-DD'),
+        // })
     }
     render() {
         const { selectCriteriaData, selectFareData } = this.state

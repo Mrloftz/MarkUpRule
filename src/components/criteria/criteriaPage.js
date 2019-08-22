@@ -8,17 +8,21 @@ import { Button, Checkbox } from 'antd'
 export const CriteriaComponent = props => {
     const [name, setName] = useState()
     const [destinations, setDestinations] = useState([])
+    const [destination, setDestination] = useState()
+    const [country, setCountry] = useState()
     const [countries, SetCountries] = useState([])
     const [paxTypes, setPaxTypes] = useState(
     ['adult', 'child', 'infant']
     )
+    const [paxType, setPaxType] = useState()
     const [activityNames, setActivityNames] = useState([])
+    const [activityName, setActivityName] = useState()
     const [checkAll, setCheckAll] = useState(false)
     const [checkedList, setcheckedList] = useState([])
     const [indeterminate, setIndeterminate] = useState(true)
     const CheckboxGroup = Checkbox.Group;
     const CheckParams = props.params
-    const { history } = props
+    // const { history } = props
 
     const onChange = checkedList => {
         setCheckAll(checkedList.length === paxTypes.length)
@@ -37,10 +41,14 @@ export const CriteriaComponent = props => {
         const fetchData = async id => {
             const { data }  = await GetCriteria(id)
             setName(data.name)
-            setDestinations(data.destination)
-            SetCountries(data.country)
+            setDestinations(data.destinations)
+            setDestination(data.setActivityName)
+            SetCountries(data.countries)
+            setCountry(data.country)
             setPaxTypes(data.paxTypes)
-            setActivityNames(data.activityName)
+            setPaxType(data.paxType)
+            setActivityName(data.activityName)
+            setActivityNames(data.activityNames)
         }
         if (CheckParams.id) {
             fetchData(CheckParams.id)
@@ -55,10 +63,14 @@ export const CriteriaComponent = props => {
                     initialValues={{
                         name,
                         destinations,
+                        destination,
                         countries,
+                        country,
                         paxTypes,
+                        paxType,
                         checkedList,
                         activityNames,
+                        activityName,
                     }}
                     enableReinitialize={true}
                     validate={ValidateSchema}
@@ -71,6 +83,13 @@ export const CriteriaComponent = props => {
                             activityNames: [`%${formValues.activityNames}%`]
                         }
                         if (CheckParams.id) {
+                            data = { ...data, 
+                                id: CheckParams.id,
+                                destination: formValues.destination,
+                                country: formValues.country,
+                                paxType: formValues.paxType,
+                                activityName: formValues.activityName,
+                            }
                             const responseUpdate =  await UpdateCriteria(data)
                             console.log(responseUpdate)
                         } else {

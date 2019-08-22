@@ -8,7 +8,6 @@ class HomePage extends React.Component {
     state = {
         key : 'fare'
     }
-
     onChangeTable({key}) {
         this.setState({ key })
     }
@@ -21,9 +20,7 @@ class HomePage extends React.Component {
                     {key === 'criteria' && <TableCriteria />}
                     {key === 'markuprule' && <TableMarkUpRule />}
                     {key === 'bookking' && <TableBooking/>}
-
-            </HomeLayout>
-         
+            </HomeLayout>     
         )
     }
 }

@@ -20,11 +20,13 @@ class TableFare extends React.Component {
             {
                 title: 'Group Name',
                 dataIndex: 'name',
-                key: 'name'
+                key: 'name',
+                width: '60%'
             },
             {
                 title: 'Edit',
                 key: 'edit',
+                width: '30%',
                 render: (text, record) => (
                     <span>
                         <Link to={`/fare/${record.id}`}>
@@ -36,7 +38,7 @@ class TableFare extends React.Component {
             {
                 title: 'Delete',
                 key: 'delete',
-                render: (text, record) => (
+                render: (key, record) => (
                     <span>
                         <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.id)}>
                             <Button type="danger">Delete</Button>
@@ -77,6 +79,7 @@ class TableFare extends React.Component {
                         />
                     </ContainSearch>
                     <TableWrapper
+                        rowKey="id"
                         style={{ marginTop: '2rem' }}
                         columns={columns}
                         dataSource={this.state.dataSource}
@@ -87,7 +90,6 @@ class TableFare extends React.Component {
                             defaultPageSize: 10,
                             showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
                         }}
-                        rowKey="id"
                     />
                 </ContainarSub>
 

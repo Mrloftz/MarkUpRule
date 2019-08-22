@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import 'antd/dist/antd.css';
 import { Table, Input, Button, Popconfirm, Form, InputNumber } from 'antd';
 import styled from 'styled-components'
-import { GetFare, GetFareAll, DeleteFare, UpdateFare, CreateFare } from '../../_service/MethodApi';
+import { GetFare, DeleteFare, UpdateFare, CreateFare } from '../../_service/MethodApi';
 import axios from 'axios';
 
 const EditableContext = React.createContext();
-
 const EditTableRow = ({ form, index, ...props }) => (
     <EditableContext.Provider value={form}>
         <tr {...props} />
     </EditableContext.Provider>
 );
-
 const EditableFormRow = Form.create()(EditTableRow);
 
 class EditableCell extends React.Component {
@@ -126,6 +124,7 @@ class FareComponent extends React.Component {
             dataSource: [
                 {
                     key: '0',
+                    name: '',
                     priceFrom: '0',
                     priceTo: '0',
                     markupType: 'Input Your Type',
@@ -135,11 +134,12 @@ class FareComponent extends React.Component {
             count: 2,
         }
     }
-   async componentDidMount() {
-    //    const CheckParams = this.props.match.params
-    //    console.log(CheckParams)
-        const data = await GetFare(8) 
-        this.setState({ dataSource : data.data.fareDetails})
+    async componentDidMount() {
+        const CheckParams = this.props.params
+        console.log(CheckParams)
+        const data = await GetFare(CheckParams)
+        console.log(data)
+        this.setState({ dataSource: data.data.fareDetails })
         // console.log(getFareId)
         // this.setState({
         //     markupRate: getFareId.markupRate,
@@ -148,12 +148,11 @@ class FareComponent extends React.Component {
         //     priceTo: getFareId.priceTo,
         // })
     }
-
-    handleDelete = key => {
+    handleDelete = id => {
         const dataSource = [...this.state.dataSource];
-        this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+        console.log(dataSource.id)
+        this.setState({ dataSource: dataSource.filter(item => item.id !== id) });
     };
-
     handleAdd = () => {
         const { count, dataSource } = this.state;
         const newData = {
@@ -168,7 +167,6 @@ class FareComponent extends React.Component {
             count: count + 1,
         });
     };
-
     handleSave = row => {
         const newData = [...this.state.dataSource];
         const index = newData.findIndex(item => row.key === item.key);
@@ -180,9 +178,13 @@ class FareComponent extends React.Component {
         this.setState({ dataSource: newData });
     };
 
+    handleInput = (e) => {
+        this.setState({ name: e.target.value})
+    }
     submitForm() {
         const { dataSource } = this.state;
-        CreateFare({
+        const CheckParams = this.props.params
+        let data = {
             name: this.state.name,
             fareDetails: dataSource.map(value => {
                 return {
@@ -192,8 +194,27 @@ class FareComponent extends React.Component {
                     priceTo: value.priceTo,
                 }
             })
+        }
+        if (CheckParams) {
+            data = { ...data, 
+                id: CheckParams}
+             UpdateFare(data)
+        } else {
+            const respon =  CreateFare(data)
+            console.log(respon)
+        }
+        // CreateFare({
+        //     name: this.state.name,
+        //     fareDetails: dataSource.map(value => {
+        //         return {
+        //             markupRate: value.markupRate,
+        //             markupType: value.markupType,
+        //             priceFrom: value.priceFrom,
+        //             priceTo: value.priceTo,
+        //         }
+        //     })
 
-        })
+        // })
     }
     render() {
         const { dataSource } = this.state;
@@ -226,7 +247,7 @@ class FareComponent extends React.Component {
                     <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
                         Add a row
             </Button>
-                    <Input placeholder="Input your table name" style={{ width: 'fit-content', marginLeft: '10px'}}/>
+                    <Input type="text" name="name" value={this.state.name} onChange={this.handleInput} placeholder="Input your table name" style={{ width: 'fit-content', marginLeft: '10px' }} />
                     <TableWrapper
                         components={components}
                         rowClassName={() => 'editable-row'}
