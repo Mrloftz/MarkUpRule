@@ -6,9 +6,10 @@ class CriteriaPage extends React.Component {
     render() {
         const params = this.props.match.params
         console.log(params)
+        const { history } = this.props
         return(
             <HomeLayout>
-                <CriteriaComponent params={params} />
+                <CriteriaComponent params={params} history={history}/>
             </HomeLayout>
             
         )

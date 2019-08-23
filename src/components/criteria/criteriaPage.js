@@ -19,10 +19,11 @@ export const CriteriaComponent = props => {
     const [activityName, setActivityName] = useState()
     const [checkAll, setCheckAll] = useState(false)
     const [checkedList, setcheckedList] = useState([])
-    const [indeterminate, setIndeterminate] = useState(true)
+    // const [indeterminate, setIndeterminate] = useState(true)
     const CheckboxGroup = Checkbox.Group;
     const CheckParams = props.params
-    // const { history } = props
+    const {history} = props
+    console.log(history)
 
     const onChange = checkedList => {
         setCheckAll(checkedList.length === paxTypes.length)
@@ -96,10 +97,11 @@ export const CriteriaComponent = props => {
                             const responseUpdate = await UpdateCriteria(data)
                             console.log(responseUpdate)
                         } else {
+                            alert("Success")
                             const responseCreate = await CriteriaCreate(data)
                             console.log(responseCreate)
                         }
-                        // history.push('/')
+                        history.push('/')
                     }}
                     render={props => (
                         <form onSubmit={props.handleSubmit}>
@@ -150,7 +152,7 @@ export const CriteriaComponent = props => {
                                 placeholder="Activity Names"
                             />
                             <ContainerButton>
-                                <Button type="danger" onCick={() => DeleteCriteria(CheckParams.id)}>
+                                <Button type="danger" onClick={() => DeleteCriteria(CheckParams.id)}>
                                     Remove
                             </Button>
                                 <Button type="primary" htmlType="submit">

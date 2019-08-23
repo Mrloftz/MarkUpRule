@@ -3,8 +3,7 @@ import 'antd/dist/antd.css'
 import { Table, Popconfirm, Input, Button } from 'antd'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { GetFareAll, DeleteFare, GetList, GetFare, GetCriteria } from '../../../_service/MethodApi';
-import { BreadCrumb } from '../../breadcrum'
+import { GetFareAll, DeleteFare, GetList } from '../../../_service/MethodApi';
 import CreateFare from '../../button/createFare';
 
 const { Search } = Input

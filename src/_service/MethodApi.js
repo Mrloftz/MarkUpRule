@@ -1,6 +1,4 @@
 import axios from 'axios'
-import { async } from 'q';
-
 
 const base_url = 'http://travizgo.dosetech.co:7799'
 
@@ -148,7 +146,7 @@ export const UpdateCriteria = body => {
 //Delete Criteria
 export const DeleteCriteria = async id => {
     return axios
-    .post(base_url + `/criteria/${id}`)
+    .delete(base_url + `/criteria/${id}`)
     .then(response => {
         return response
     })
@@ -237,6 +235,7 @@ export const DeleteMarkUpRule = async id => {
         return error
     })
 }
+
 
 // Get All MarkupType 
 export const GetAllMarkupType = async () => {

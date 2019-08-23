@@ -1,11 +1,10 @@
 import React from 'react'
 import Select from 'react-select';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { GetAllMarkUpRule, CreateMarkupRule, GetCriteriaAll, GetFareAll, GetCriteria, GetFare, GetMarkupRule, UpdateCriteria } from '../../_service/MethodApi';
+import { CreateMarkupRule, GetCriteriaAll, GetFareAll, GetMarkupRule, DeleteMarkUpRule, UpdateMarkUpRule } from '../../_service/MethodApi';
 import styled from 'styled-components'
 import { DatePicker, Button, Input } from 'antd'
 import moment from 'moment'
-
 const { TextArea } = Input;
 class MarkUpRuleComponent extends React.Component {
     state = {
@@ -48,15 +47,15 @@ class MarkUpRuleComponent extends React.Component {
             selectFareData,
         })
         const DataMarkupRule = await GetMarkupRule(CheckParams.id)
-        console.log(DataMarkupRule.data)
+        console.log(DataMarkupRule.data.fareId)
         this.setState({
-            criteriaId: DataMarkupRule.data.criteria.criteriaId,
+            criteriaId: DataMarkupRule.data.criteriaId,
             destinations: DataMarkupRule.data.criteria.destinations,
             countries: DataMarkupRule.data.criteria.countries,
             paxTypes: DataMarkupRule.data.criteria.paxTypes,
             activityNames: DataMarkupRule.data.criteria.activityNames,
             fareData: DataMarkupRule.data.fare.fareDetails,
-            fareId: DataMarkupRule.data.fare.fareId,
+            fareId: DataMarkupRule.data.fareId,
             priceFrom: DataMarkupRule.data.fare.priceFrom,
             priceTo: DataMarkupRule.data.fare.priceTo,
             nameMarkupRule: DataMarkupRule.data.name,
@@ -99,6 +98,7 @@ class MarkUpRuleComponent extends React.Component {
     }
     async submitForm() {
         alert('จัดไปดิคั่บ')
+        const {history} = this.props
         const CheckParams = this.props.params
         let data = {
             name: this.state.nameMarkupRule,
@@ -109,19 +109,14 @@ class MarkUpRuleComponent extends React.Component {
         }
         if (CheckParams.id) {
             data = {...data, id: CheckParams.id } 
-            await UpdateCriteria(data)
+            await UpdateMarkUpRule(data)
         } else {
             await CreateMarkupRule(data)
         }
-        // CreateMarkupRule({
-        //     name: this.state.nameMarkupRule,
-        //     fareId: this.state.fareId,
-        //     criteriaId: this.state.criteriaId,
-        //     startDateTime: moment(this.state.startDateTime).format('YYYY-MM-DD'),
-        //     endDateTime: moment(this.state.endDateTime).format('YYYY-MM-DD'),
-        // })
+        history.push("/")
     }
     render() {
+        const CheckParams = this.props.params
         const { selectCriteriaData, selectFareData } = this.state
         console.log(this.state)
         return (
@@ -139,7 +134,6 @@ class MarkUpRuleComponent extends React.Component {
                 <Titlesub>Country Code: {this.state.countries}</Titlesub>
                 <Titlesub>Type of Pax: {this.state.paxTypes}</Titlesub>
                 <Titlesub>Activity Name: {this.state.activityNames}</Titlesub>
-
                 <br />
                 <div className="row">
                     <div className="col-md-4"></div>
@@ -182,7 +176,7 @@ class MarkUpRuleComponent extends React.Component {
                 </div>
                 <br />
                 <div style={{ float: 'right' }}>
-                    <Button type="danger" >Reset</Button>
+                    <Button type="danger" onClick={() => DeleteMarkUpRule(CheckParams)}>Remove</Button>
                     <Button type="primary" onClick={() => this.submitForm()}>Save</Button>
                 </div>
             </div>

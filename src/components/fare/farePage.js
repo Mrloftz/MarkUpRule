@@ -1,9 +1,8 @@
 import React from 'react'
 import 'antd/dist/antd.css';
-import { Table, Input, Button, Popconfirm, Form, InputNumber } from 'antd';
+import { Table, Input, Button, Popconfirm, Form } from 'antd';
 import styled from 'styled-components'
 import { GetFare, DeleteFare, UpdateFare, CreateFare } from '../../_service/MethodApi';
-import axios from 'axios';
 
 const EditableContext = React.createContext();
 const EditTableRow = ({ form, index, ...props }) => (
@@ -114,7 +113,7 @@ class FareComponent extends React.Component {
                 dataIndex: 'delete',
                 render: (text, record) =>
                     this.state.dataSource.length >= 1 ? (
-                        <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
+                        <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.id)}>
                             <a>Delete</a>
                         </Popconfirm>
                     ) : null,
@@ -135,8 +134,9 @@ class FareComponent extends React.Component {
         }
     }
     async componentDidMount() {
+        const {history} = this.props
+        console.log(history)
         const CheckParams = this.props.params
-        console.log(CheckParams)
         const data = await GetFare(CheckParams)
         console.log(data)
         this.setState({ 
@@ -145,19 +145,18 @@ class FareComponent extends React.Component {
         })
     }
     handleDelete = id => {
-        console.log(dataSource)
         const dataSource = [...this.state.dataSource];
-        console.log(dataSource.id)
+        console.log(dataSource)
         this.setState({ dataSource: dataSource.filter(item => item.id !== id) });
     };
     handleAdd = () => {
         const { count, dataSource } = this.state;
         const newData = {
             key: count,
-            priceFrom: 0,
-            priceTo: 0,
+            priceFrom: 'Input value',
+            priceTo: 'Input value',
             markupType: `Input Your Type ${count}`,
-            markupRate: '0',
+            markupRate: 'Input value',
         };
         this.setState({
             dataSource: [...dataSource, newData],
@@ -179,6 +178,7 @@ class FareComponent extends React.Component {
     }
     submitForm() {
         const { dataSource } = this.state;
+        const { history } = this.props
         const CheckParams = this.props.params
         let data = {
             name: this.state.name,
@@ -201,8 +201,10 @@ class FareComponent extends React.Component {
             const respon =  CreateFare(data)
             console.log(respon)
         }
+        history.push("/")
     }
     render() {
+        const CheckParams = this.props.params
         const { dataSource } = this.state;
         console.log(dataSource)
         const components = {
@@ -244,7 +246,7 @@ class FareComponent extends React.Component {
                     />
                 </ContainarSub>
                 <ContainerButton>
-                    <Button type="danger">
+                    <Button type="danger" onClick={() => DeleteFare(CheckParams)}>
                         Remove
                 </Button>
                     <Button type="primary" onClick={() => this.submitForm()}>

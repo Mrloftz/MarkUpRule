@@ -30,22 +30,22 @@ class TableMarkUpRule extends React.Component {
       {
         title: 'Destinations',
         dataIndex: 'criteria.destination',
-        key: '',
+        key: 'destination',
       },
       {
         title: 'Country Code',
         dataIndex: 'criteria.country',
-        key: '',
+        key: 'country',
       },
       {
         title: 'Type of Pax',
         dataIndex: 'criteria.paxTypes',
-        key: '',
+        key: 'paxTypes',
       },
       {
         title: 'Activity Name',
         dataIndex: 'criteria.activityName',
-        key: '',
+        key: 'activityName',
       },
       {
         title: 'Edit',

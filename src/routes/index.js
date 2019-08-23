@@ -5,7 +5,6 @@ import CriteriaPage from '../pages/criteria/criteria';
 import MarkUpRulePage from '../pages/markuprule/markuprule';
 import BookingPage from '../pages/booking/booking'
 import HomePage from '../pages/home/home';
-
 const Routing = () => {
     return (
         <BrowserRouter>

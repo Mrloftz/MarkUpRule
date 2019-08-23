@@ -7,10 +7,11 @@ import  MarkUpRuleComponent  from '../../components/markuprule/markuprulePage';
 class MarkUpRulePage extends React.Component {
     render() {
         const params = this.props.match.params
-        console.log(params)
+        console.log(this.props)
+        const { history } = this.props
         return(
             <HomeLayout>
-            <MarkUpRuleComponent params={params}/>
+            <MarkUpRuleComponent params={params} history={history}/>
             </HomeLayout>
      
         )
