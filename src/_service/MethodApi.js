@@ -213,10 +213,23 @@ export const CreateMarkupRule = data => {
     })
 }
 
-// Update Mark up rule
+// Update Markuprule
 export const UpdateMarkUpRule = data => {
     return axios
     .put(base_url + '/markupRule', data)
+    .then(response => {
+        return response
+    })
+    .catch(error => {
+        return error
+    })
+}
+
+// Delete MarkUpRule
+
+export const DeleteMarkUpRule = async id => {
+    return axios
+    .delete(base_url + `/markupRule/${id}`)
     .then(response => {
         return response
     })
@@ -250,11 +263,54 @@ export const GetAllpaxType = async () => {
     })
 }
 
-
 // Booking API
 
-// Get Booking Details
-// export const GetBookingAll = async () => {
-//     return axios
-//     .get(base_url + '/booking')
-// }
+// Get Booking List
+export const GetBookingList = async () => {
+    const body  = {
+        holderName: "",
+        page: '1',
+        itemPerPage: 5
+    }
+    return axios
+    .post(base_url + '/booking/list', body)
+    .then(response => {
+        console.log(response)
+        return response
+    })
+    .catch(error => {
+        return error
+    })
+}
+// Get Search
+export const GetSearch = async keyword => {
+    const body  = {
+        holderName: keyword,
+        page: '1',
+        itemPerPage: 5
+    }
+    return axios
+    .post(base_url + '/booking/list', body)
+    .then(response => {
+        return response
+    })
+    .catch(error => {
+        return error
+    })
+}
+
+// Get Booking Detail
+
+export const GetBookingDetail = async id => {
+    return axios 
+    .get(base_url + `/booking/${id}`)
+    .then(response => {
+        return response
+    })
+    .catch(error => {
+        return error
+    })
+}
+
+// Cancel Booking
+

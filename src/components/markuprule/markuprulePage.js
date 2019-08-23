@@ -25,6 +25,8 @@ class MarkUpRuleComponent extends React.Component {
         countries: [],
         activityNames: [],
         name: '',
+        selectnameCriteria: '',
+        selectnameFare: '',
     }
     async componentDidMount() {
         const CheckParams = this.props.params
@@ -58,8 +60,10 @@ class MarkUpRuleComponent extends React.Component {
             priceFrom: DataMarkupRule.data.fare.priceFrom,
             priceTo: DataMarkupRule.data.fare.priceTo,
             nameMarkupRule: DataMarkupRule.data.name,
-            // startDateTime: DataMarkupRule.data.startDateTime,
-            // endDateTime: DataMarkupRule.data.endDateTime
+            startDateTime: moment(DataMarkupRule.data.startDateTime),
+            endDateTime: moment(DataMarkupRule.data.endDateTime),
+            selectnameCriteria: DataMarkupRule.data.criteria.name,
+            selectnameFare: DataMarkupRule.data.fare.name
         })
     }
     handleDateChange = (e, key) => {
@@ -130,7 +134,8 @@ class MarkUpRuleComponent extends React.Component {
                     </div>
                     <div className="col-md-4"></div>
                 </div>
-                     <Titlesub>Destinations: {this.state.destinations}</Titlesub>
+                <Titlesub>Name: {this.state.selectnameCriteria}</Titlesub>
+                <Titlesub>Destinations: {this.state.destinations}</Titlesub>
                 <Titlesub>Country Code: {this.state.countries}</Titlesub>
                 <Titlesub>Type of Pax: {this.state.paxTypes}</Titlesub>
                 <Titlesub>Activity Name: {this.state.activityNames}</Titlesub>
@@ -147,6 +152,7 @@ class MarkUpRuleComponent extends React.Component {
                      {
                     this.state.fareData.map((fare, index) => {
                         return <React.Fragment key={index}>
+                            <Titlesub>Name: {this.state.selectnameFare}</Titlesub>
                             <Titlesub>From: {fare.priceFrom}</Titlesub>
                             <Titlesub>To: {fare.priceTo}</Titlesub>
                             <Titlesub>Type: {fare.markupType}</Titlesub>

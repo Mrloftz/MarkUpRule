@@ -12,7 +12,7 @@ export const CriteriaComponent = props => {
     const [country, setCountry] = useState()
     const [countries, SetCountries] = useState([])
     const [paxTypes, setPaxTypes] = useState(
-    ['adult', 'child', 'infant']
+        ['adult', 'child', 'infant']
     )
     const [paxType, setPaxType] = useState()
     const [activityNames, setActivityNames] = useState([])
@@ -39,21 +39,23 @@ export const CriteriaComponent = props => {
     }
     useEffect(() => {
         const fetchData = async id => {
-            const { data }  = await GetCriteria(id)
+            const { data } = await GetCriteria(id)
             setName(data.name)
             setDestinations(data.destinations)
-            setDestination(data.setActivityName)
+            setDestination(data.destination)
             SetCountries(data.countries)
             setCountry(data.country)
             setPaxTypes(data.paxTypes)
             setPaxType(data.paxType)
+            setCheckAll(data.paxTypes)
+            setcheckedList(data.paxTypes)
             setActivityName(data.activityName)
             setActivityNames(data.activityNames)
         }
         if (CheckParams.id) {
             fetchData(CheckParams.id)
         }
-    },[CheckParams.id])
+    }, [CheckParams.id])
 
     return (
         <React.Fragment>
@@ -83,14 +85,15 @@ export const CriteriaComponent = props => {
                             activityNames: [`%${formValues.activityNames}%`]
                         }
                         if (CheckParams.id) {
-                            data = { ...data, 
+                            data = {
+                                ...data,
                                 id: CheckParams.id,
                                 destination: formValues.destination,
                                 country: formValues.country,
                                 paxType: formValues.paxType,
                                 activityName: formValues.activityName,
                             }
-                            const responseUpdate =  await UpdateCriteria(data)
+                            const responseUpdate = await UpdateCriteria(data)
                             console.log(responseUpdate)
                         } else {
                             const responseCreate = await CriteriaCreate(data)
@@ -100,6 +103,20 @@ export const CriteriaComponent = props => {
                     }}
                     render={props => (
                         <form onSubmit={props.handleSubmit}>
+                            <Titlesub>Type of Pax</Titlesub>
+                            <div style={{ borderBottom: '1px solid #E9E9E9' }}>
+                                <Checkbox
+                                    onChange={onCheckAllChange}
+                                    checked={checkAll}
+                                >
+                                    Check all
+                            </Checkbox>
+                            </div>
+                            <CheckboxGroup
+                                options={paxTypes}
+                                value={checkedList}
+                                onChange={onChange}
+                            />
                             <Titlesub>Name</Titlesub>
                             <Field
                                 name="name"
@@ -124,35 +141,6 @@ export const CriteriaComponent = props => {
                                 onChange={props.handleChange}
                                 placeholder="Country code"
                             />
-                            <Titlesub>Type of Pax</Titlesub>
-                            <div style={{ borderBottom: '1px solid #E9E9E9' }}>
-                                <Checkbox
-                                onChange={onCheckAllChange}
-                                checked={checkAll}
-                                >
-                                Check all
-                            </Checkbox>
-                            </div>
-                            <CheckboxGroup 
-                            options={paxTypes}
-                            value={checkedList}
-                            onChange={onChange}
-                            />
-                            {/* <div style={{ borderBottom: '1px solid #E9E9E9' }}>
-                                 <Radio
-                                
-                                 >
-                                 CheckAll
-                                </Radio>
-                            </div>
-                           
-                            <Field
-                                name="paxTypes"
-                                component={FieldCheckboxInput}
-                                value={props.values.paxTypes}
-                                onChange={props.handleChange}
-                                data={paxTypesMap}
-                            /> */}
                             <Titlesub>Activity Name</Titlesub>
                             <Field
                                 name="activityNames"

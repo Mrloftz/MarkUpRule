@@ -67,7 +67,7 @@ class TableFare extends React.Component {
         return (
             <div>
                 <ContainarSub>
-                    <BreadCrumb />
+                    {/* <BreadCrumb /> */}
                     <h1>Fare</h1> 
                     <CreateFare />
                     <ContainSearch>

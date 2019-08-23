@@ -19,7 +19,7 @@ class HomePage extends React.Component {
                     {key === 'fare' && <TableFare />}
                     {key === 'criteria' && <TableCriteria />}
                     {key === 'markuprule' && <TableMarkUpRule />}
-                    {key === 'bookking' && <TableBooking/>}
+                    {key === 'booking' && <TableBooking />}
             </HomeLayout>     
         )
     }

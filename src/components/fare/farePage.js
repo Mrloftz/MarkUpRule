@@ -139,16 +139,13 @@ class FareComponent extends React.Component {
         console.log(CheckParams)
         const data = await GetFare(CheckParams)
         console.log(data)
-        this.setState({ dataSource: data.data.fareDetails })
-        // console.log(getFareId)
-        // this.setState({
-        //     markupRate: getFareId.markupRate,
-        //     markupType: getFareId.markupType,
-        //     priceFrom: getFareId.priceFrom,
-        //     priceTo: getFareId.priceTo,
-        // })
+        this.setState({ 
+            dataSource: data.data.fareDetails,
+            name: data.data.name    
+        })
     }
     handleDelete = id => {
+        console.log(dataSource)
         const dataSource = [...this.state.dataSource];
         console.log(dataSource.id)
         this.setState({ dataSource: dataSource.filter(item => item.id !== id) });
@@ -177,7 +174,6 @@ class FareComponent extends React.Component {
         });
         this.setState({ dataSource: newData });
     };
-
     handleInput = (e) => {
         this.setState({ name: e.target.value})
     }
@@ -197,24 +193,14 @@ class FareComponent extends React.Component {
         }
         if (CheckParams) {
             data = { ...data, 
-                id: CheckParams}
+                id: CheckParams,
+                updateType: "update"
+            }
              UpdateFare(data)
         } else {
             const respon =  CreateFare(data)
             console.log(respon)
         }
-        // CreateFare({
-        //     name: this.state.name,
-        //     fareDetails: dataSource.map(value => {
-        //         return {
-        //             markupRate: value.markupRate,
-        //             markupType: value.markupType,
-        //             priceFrom: value.priceFrom,
-        //             priceTo: value.priceTo,
-        //         }
-        //     })
-
-        // })
     }
     render() {
         const { dataSource } = this.state;
@@ -249,6 +235,7 @@ class FareComponent extends React.Component {
             </Button>
                     <Input type="text" name="name" value={this.state.name} onChange={this.handleInput} placeholder="Input your table name" style={{ width: 'fit-content', marginLeft: '10px' }} />
                     <TableWrapper
+                        rowKey="id"
                         components={components}
                         rowClassName={() => 'editable-row'}
                         bordered

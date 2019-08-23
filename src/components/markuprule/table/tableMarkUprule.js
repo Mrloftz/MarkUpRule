@@ -3,7 +3,7 @@ import 'antd/dist/antd.css'
 import { Table, Popconfirm, Input, Button } from 'antd'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { GetAllMarkUpRule, GetListMarkupRule } from '../../../_service/MethodApi';
+import { GetAllMarkUpRule, GetListMarkupRule, DeleteMarkUpRule } from '../../../_service/MethodApi';
 import CreateMarkUpRule from '../../button/createMarkUpRule';
 
 
@@ -78,8 +78,8 @@ class TableMarkUpRule extends React.Component {
   }
   handleDelete = async id => {
       // e.preventDefault()
-      // await De(id)
-      // this.setState({ dataSource: this.state.dataSource.filter(item => item.id !== id) })
+      await DeleteMarkUpRule(id)
+      this.setState({ dataSource: this.state.dataSource.filter(item => item.id !== id) })
     }
   handleSearch = async value => {
     //axios get search api
