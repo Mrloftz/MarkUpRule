@@ -94,6 +94,7 @@ export const CriteriaComponent = props => {
                                 paxType: formValues.paxType,
                                 activityName: formValues.activityName,
                             }
+                            alert("Updateeeeeeeeeee")
                             const responseUpdate = await UpdateCriteria(data)
                             console.log(responseUpdate)
                         } else {

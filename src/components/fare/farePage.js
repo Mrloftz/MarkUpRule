@@ -120,6 +120,7 @@ class FareComponent extends React.Component {
             },
         ];
         this.state = {
+            selectType: true,
             dataSource: [
                 {
                     key: '0',
@@ -134,11 +135,9 @@ class FareComponent extends React.Component {
         }
     }
     async componentDidMount() {
-        const {history} = this.props
-        console.log(history)
+        // const {history} = this.props
         const CheckParams = this.props.params
         const data = await GetFare(CheckParams)
-        console.log(data)
         this.setState({ 
             dataSource: data.data.fareDetails,
             name: data.data.name    
@@ -246,9 +245,10 @@ class FareComponent extends React.Component {
                     />
                 </ContainarSub>
                 <ContainerButton>
-                    <Button type="danger" onClick={() => DeleteFare(CheckParams)}>
+                    {CheckParams && <Button type="danger" onClick={() => DeleteFare(CheckParams)}>
                         Remove
-                </Button>
+                </Button>}
+       
                     <Button type="primary" onClick={() => this.submitForm()}>
                         Save
                 </Button>

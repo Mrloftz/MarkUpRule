@@ -36,8 +36,8 @@ class TableCriteria extends React.Component {
             },
             {
                 title: 'Type of Pax',
-                dataIndex: 'paxTypes',
-                key: 'paxTypes'
+                dataIndex: 'paxType',
+                key: 'paxType'
             },
             {
                 title: 'Activity Name',

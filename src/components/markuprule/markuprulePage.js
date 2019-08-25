@@ -97,7 +97,7 @@ class MarkUpRuleComponent extends React.Component {
         }
     }
     async submitForm() {
-        alert('จัดไปดิคั่บ')
+       
         const {history} = this.props
         const CheckParams = this.props.params
         let data = {
@@ -113,6 +113,7 @@ class MarkUpRuleComponent extends React.Component {
         } else {
             await CreateMarkupRule(data)
         }
+        alert('จัดไปดิคั่บ')
         history.push("/")
     }
     render() {
@@ -129,7 +130,8 @@ class MarkUpRuleComponent extends React.Component {
                     </div>
                     <div className="col-md-4"></div>
                 </div>
-                <Titlesub>Name: {this.state.selectnameCriteria}</Titlesub>
+                {CheckParams && <Titlesub>Name :{this.state.selectnameCriteria}</Titlesub>}
+                {/* <Titlesub>Name: {this.state.selectnameCriteria}</Titlesub> */}
                 <Titlesub>Destinations: {this.state.destinations}</Titlesub>
                 <Titlesub>Country Code: {this.state.countries}</Titlesub>
                 <Titlesub>Type of Pax: {this.state.paxTypes}</Titlesub>
@@ -143,10 +145,10 @@ class MarkUpRuleComponent extends React.Component {
                     </div>
                     <div className="col-md-4"></div>
                 </div>
+                {CheckParams && <Titlesub>Name : {this.state.selectnameFare}</Titlesub>}
                      {
                     this.state.fareData.map((fare, index) => {
                         return <React.Fragment key={index}>
-                            <Titlesub>Name: {this.state.selectnameFare}</Titlesub>
                             <Titlesub>From: {fare.priceFrom}</Titlesub>
                             <Titlesub>To: {fare.priceTo}</Titlesub>
                             <Titlesub>Type: {fare.markupType}</Titlesub>
@@ -176,7 +178,7 @@ class MarkUpRuleComponent extends React.Component {
                 </div>
                 <br />
                 <div style={{ float: 'right' }}>
-                    <Button type="danger" onClick={() => DeleteMarkUpRule(CheckParams)}>Remove</Button>
+                <Button type="danger" onClick={() => DeleteMarkUpRule(CheckParams)}>Remove</Button>
                     <Button type="primary" onClick={() => this.submitForm()}>Save</Button>
                 </div>
             </div>
