@@ -1,8 +1,10 @@
 import React from 'react'
 import 'antd/dist/antd.css';
-import { Table, Input, Button, Popconfirm, Form } from 'antd';
+import { Table, Input, Button, Popconfirm, Form, Select } from 'antd';
 import styled from 'styled-components'
-import { GetFare, DeleteFare, UpdateFare, CreateFare } from '../../_service/MethodApi';
+import { GetFare, DeleteFare, UpdateFare, CreateFare, GetMarkUpType } from '../../_service/MethodApi';
+import { configConsumerProps } from 'antd/lib/config-provider';
+import { array } from 'prop-types';
 
 const EditableContext = React.createContext();
 const EditTableRow = ({ form, index, ...props }) => (
@@ -83,7 +85,7 @@ class EditableCell extends React.Component {
         );
     }
 }
-
+const Option = Select.option
 class FareComponent extends React.Component {
     constructor(props) {
         super(props)
@@ -91,21 +93,45 @@ class FareComponent extends React.Component {
             {
                 title: 'From',
                 dataIndex: 'priceFrom',
+                key: 'priceFrom',
+                width: '20%',
                 editable: true,
             },
             {
                 title: 'To',
                 dataIndex: 'priceTo',
+                key: 'priceTo',
+                width: '20%',
                 editable: true,
             },
             {
                 title: 'Type',
                 dataIndex: 'markupType',
-                editable: true,
+                key: 'markupType',
+                render: (key) => {
+                    return (
+                        <div><select>
+                            <option>Percent</option>
+                            <option>Bath</option>
+                            </select></div>
+                    )
+                }
+                // render: () => {
+                //     return (
+                //         <Select style={{ width: 200 }}>
+                //             {datatype.map(value => (
+                //                 <Option key={value}>
+                //                     {value.name}
+                //                 </Option>
+                //             ))}
+                //         </Select>
+                //     )
+                // }
             },
             {
                 title: 'Rate',
                 dataIndex: 'markupRate',
+                width: '20%',
                 editable: true,
             },
             {
@@ -120,7 +146,8 @@ class FareComponent extends React.Component {
             },
         ];
         this.state = {
-            selectType: true,
+            selectDatatype: [],
+            datatype: [],
             dataSource: [
                 {
                     key: '0',
@@ -135,12 +162,25 @@ class FareComponent extends React.Component {
         }
     }
     async componentDidMount() {
-        // const {history} = this.props
+        // const dataType = await GetMarkUpType()
+        // const selectDatatype = dataType.data.map(value => {
+        //     return {
+        //         label: value.name, value
+        //     }
+        // })
+        // this.setState({ selectDatatype })
         const CheckParams = this.props.params
         const data = await GetFare(CheckParams)
-        this.setState({ 
+        this.setState({
             dataSource: data.data.fareDetails,
-            name: data.data.name    
+            name: data.data.name
+        })
+    }
+    onSelectChange({ value }) {
+        console.log(value)
+        const type = value
+        this.setState({
+            name: type.name
         })
     }
     handleDelete = id => {
@@ -173,7 +213,7 @@ class FareComponent extends React.Component {
         this.setState({ dataSource: newData });
     };
     handleInput = (e) => {
-        this.setState({ name: e.target.value})
+        this.setState({ name: e.target.value })
     }
     submitForm() {
         const { dataSource } = this.state;
@@ -191,14 +231,17 @@ class FareComponent extends React.Component {
             })
         }
         if (CheckParams) {
-            data = { ...data, 
+            alert("Update Success")
+            data = {
+                ...data,
                 id: CheckParams,
+                fareId: CheckParams,
                 updateType: "update"
             }
-             UpdateFare(data)
+            UpdateFare(data)
         } else {
-            const respon =  CreateFare(data)
-            console.log(respon)
+            alert("Create Success")
+            CreateFare(data)
         }
         history.push("/")
     }
@@ -248,7 +291,7 @@ class FareComponent extends React.Component {
                     {CheckParams && <Button type="danger" onClick={() => DeleteFare(CheckParams)}>
                         Remove
                 </Button>}
-       
+
                     <Button type="primary" onClick={() => this.submitForm()}>
                         Save
                 </Button>

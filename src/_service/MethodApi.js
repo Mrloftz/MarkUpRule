@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { EPROTONOSUPPORT } from 'constants';
 
 const base_url = 'http://travizgo.dosetech.co:7799'
 
@@ -39,6 +40,18 @@ export const GetList = async  keyword => {
     .post(base_url + '/fare/list', body)
     .then(reponse => {
         return reponse
+    })
+    .catch(error => {
+        return error
+    })
+}
+
+// Get MarkupType 
+export const GetMarkUpType = async () => {
+    return await axios
+    .get(base_url + '/fare/markupType')
+    .then(response => {
+        return response
     })
     .catch(error => {
         return error
@@ -105,8 +118,24 @@ export const GetCriteriaAll = async () => {
           return error
       })
   }
-// GetList Criteria
-export const GetListCriteria = async keyword => {
+  // GetList Criteria 
+ export const GetListCriteria = async () => {
+     const body = {
+         name: "",
+         page: 1,
+         itemPerPage: 5,
+     }
+     return await axios
+     .post(base_url + '/criteria/list' , body)
+     .then(response => {
+         return response
+     })
+     .catch(error => {
+         return error
+     })
+ }
+// GetList Search Criteria
+export const GetSearchCriteria = async keyword => {
     const body = {
         name: keyword,
         page: 1,
@@ -236,32 +265,6 @@ export const DeleteMarkUpRule = async id => {
     })
 }
 
-
-// Get All MarkupType 
-export const GetAllMarkupType = async () => {
-    return axios
-    .get(base_url + '/markupType')
-    .then(response => {
-        return response
-    })
-    .catch(error => {
-        return error
-    })
-}
-
-// Get All pax type
-
-export const GetAllpaxType = async () => {
-    return axios
-    .get(base_url + '/paxtype')
-    .then(reponse => {
-        return reponse
-    })
-    .catch(error => {
-        return error
-    })
-}
-
 // Booking API
 
 // Get Booking List
@@ -312,4 +315,13 @@ export const GetBookingDetail = async id => {
 }
 
 // Cancel Booking
-
+export const CancelBooking = async id => {
+    return axios
+    .get(base_url + `/booking/${id}`)
+    .then(response => {
+        return response
+    })
+    .catch(error => {
+        return error
+    })
+}

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import CreateCriteria from '../../button/createCriteria';
 
 
-import { GetCriteriaAll, DeleteCriteria, GetListCriteria } from '../../../_service/MethodApi';
+import { GetCriteriaAll, DeleteCriteria, GetListCriteria, GetSearchCriteria } from '../../../_service/MethodApi';
 
 
 const { Search } = Input
@@ -25,7 +25,7 @@ class TableCriteria extends React.Component {
                 key: 'name'
             },
             {
-                title: 'Departure',
+                title: 'Destinations',
                 dataIndex: 'destinations',
                 key: 'destinations'
             },
@@ -68,8 +68,9 @@ class TableCriteria extends React.Component {
     }
     async componentDidMount() {
         // axios get Data all
-        const dataSource = await GetCriteriaAll()
-        this.setState({ dataSource: dataSource.data })
+        const dataSource = await GetListCriteria()
+        console.log(dataSource)
+        this.setState({ dataSource: dataSource.data.criterias })
     }
     handleDelete = async id => {
         // axios Delete data 
@@ -78,7 +79,7 @@ class TableCriteria extends React.Component {
     }
     handleSearch = async value => {
         // axios get search api
-        const dataSource = await GetListCriteria(value)
+        const dataSource = await GetSearchCriteria(value)
         this.setState({ dataSource: dataSource.data })
     }
     render() {

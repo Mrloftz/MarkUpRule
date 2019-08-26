@@ -41,17 +41,19 @@ export const CriteriaComponent = props => {
     useEffect(() => {
         const fetchData = async id => {
             const { data } = await GetCriteria(id)
+            console.log(data)
             setName(data.name)
             setDestinations(data.destinations)
-            setDestination(data.destination)
             SetCountries(data.countries)
-            setCountry(data.country)
-            setPaxTypes(data.paxTypes)
-            setPaxType(data.paxType)
-            setCheckAll(data.paxTypes)
-            setcheckedList(data.paxTypes)
-            setActivityName(data.activityName)
             setActivityNames(data.activityNames)
+            setCheckAll(data.checkAll)
+            setcheckedList(data.paxTypes)
+            // setCountry(data.country)
+            // setPaxTypes(data.paxTypes)
+            // setPaxType(data.paxType)
+            // setCheckAll(data.paxTypes)
+            // setActivityName(data.activityName)
+            
         }
         if (CheckParams.id) {
             fetchData(CheckParams.id)
@@ -83,7 +85,8 @@ export const CriteriaComponent = props => {
                             destinations: [formValues.destinations],
                             countries: [formValues.countries],
                             paxTypes: checkedList,
-                            activityNames: [`%${formValues.activityNames}%`]
+                            activityNames: [`${formValues.activityNames}`]
+                            // activityNames: [`%${formValues.activityNames}%`]
                         }
                         if (CheckParams.id) {
                             data = {
@@ -153,9 +156,10 @@ export const CriteriaComponent = props => {
                                 placeholder="Activity Names"
                             />
                             <ContainerButton>
-                                <Button type="danger" onClick={() => DeleteCriteria(CheckParams.id)}>
+                                {CheckParams.id && <Button type="danger" onClick={() => {if (window.confirm('Are you sure you wish to delete this item?')) DeleteCriteria(CheckParams.id)} }>
                                     Remove
-                            </Button>
+                            </Button>}
+                                
                                 <Button type="primary" htmlType="submit">
                                     Save
                             </Button>
