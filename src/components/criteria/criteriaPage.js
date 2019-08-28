@@ -97,11 +97,11 @@ export const CriteriaComponent = props => {
                                 paxType: formValues.paxType,
                                 activityName: formValues.activityName,
                             }
-                            alert("Updateeeeeeeeeee")
+                            alert("Update Success")
                             const responseUpdate = await UpdateCriteria(data)
                             console.log(responseUpdate)
                         } else {
-                            alert("Success")
+                            alert("Create Success")
                             const responseCreate = await CriteriaCreate(data)
                             console.log(responseCreate)
                         }
@@ -147,7 +147,7 @@ export const CriteriaComponent = props => {
                                 onChange={props.handleChange}
                                 placeholder="Country code"
                             />
-                            <Titlesub>Activity Name</Titlesub>
+                            <Titlesub>Activity Name (Ex. %Destiny%)</Titlesub>
                             <Field
                                 name="activityNames"
                                 component={FieldInput}

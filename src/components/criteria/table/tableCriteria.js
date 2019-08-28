@@ -41,8 +41,8 @@ class TableCriteria extends React.Component {
             },
             {
                 title: 'Activity Name',
-                dataIndex: 'activityNames',
-                key: 'activityNames'
+                dataIndex: 'activityName',
+                key: 'activityName'
             },
             {
                 title: 'Edit',

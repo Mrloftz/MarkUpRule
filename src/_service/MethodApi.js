@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { EPROTONOSUPPORT } from 'constants';
+import { async } from 'q';
 
 const base_url = 'http://travizgo.dosetech.co:7799'
 
@@ -40,6 +40,23 @@ export const GetList = async  keyword => {
     .post(base_url + '/fare/list', body)
     .then(reponse => {
         return reponse
+    })
+    .catch(error => {
+        return error
+    })
+}
+
+//getList table 
+export const GetListTableFare = async () => {
+    const body = {
+        name: "",
+        page: 1,
+        itemPerPage: 5
+    }
+    return await axios
+    .post(base_url + '/fare/list', body)
+    .then(response => {
+        return response 
     })
     .catch(error => {
         return error
@@ -174,7 +191,7 @@ export const UpdateCriteria = body => {
 }
 //Delete Criteria
 export const DeleteCriteria = async id => {
-    return axios
+    return await axios
     .delete(base_url + `/criteria/${id}`)
     .then(response => {
         return response
@@ -188,7 +205,7 @@ export const DeleteCriteria = async id => {
 
 // Get MarkupRule All
 export const GetAllMarkUpRule = async () => {
-    return axios
+    return await axios
     .get(base_url + '/markupRule/all')
     .then(response => {
         return response
@@ -199,7 +216,7 @@ export const GetAllMarkUpRule = async () => {
 }
 // Get MarkupRule with params
 export const GetMarkupRule = async id => {
-    return axios
+    return await axios
     .get(base_url + `/markupRule/${id}`)
     .then(response => {
         return response
@@ -217,7 +234,7 @@ export const GetListMarkupRule = async keyword => {
         page: '1',
         itemPerPage: 5
     }
-    return axios
+    return await axios
     .post(base_url + '/markuprule/list', body)
     .then(response => {
         return response
@@ -255,7 +272,7 @@ export const UpdateMarkUpRule = data => {
 // Delete MarkUpRule
 
 export const DeleteMarkUpRule = async id => {
-    return axios
+    return await axios
     .delete(base_url + `/markupRule/${id}`)
     .then(response => {
         return response
@@ -274,7 +291,7 @@ export const GetBookingList = async () => {
         page: '1',
         itemPerPage: 5
     }
-    return axios
+    return await axios
     .post(base_url + '/booking/list', body)
     .then(response => {
         console.log(response)
@@ -291,7 +308,7 @@ export const GetSearch = async keyword => {
         page: '1',
         itemPerPage: 5
     }
-    return axios
+    return await axios
     .post(base_url + '/booking/list', body)
     .then(response => {
         return response
@@ -304,7 +321,7 @@ export const GetSearch = async keyword => {
 // Get Booking Detail
 
 export const GetBookingDetail = async id => {
-    return axios 
+    return await axios 
     .get(base_url + `/booking/${id}`)
     .then(response => {
         return response
@@ -316,7 +333,7 @@ export const GetBookingDetail = async id => {
 
 // Cancel Booking
 export const CancelBooking = async id => {
-    return axios
+    return await axios
     .get(base_url + `/booking/${id}`)
     .then(response => {
         return response

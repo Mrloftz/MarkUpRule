@@ -1,6 +1,6 @@
 import React from 'react'
 import 'antd/dist/antd.css'
-import { Table, Input, Button } from 'antd'
+import { Table, Input, Button, Modal } from 'antd'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { GetBookingList, GetSearch } from '../../../_service/MethodApi';
@@ -14,7 +14,9 @@ class TableBooking extends React.Component {
             dataSource: [],
             pagination: {},
             searchText: '',
+            modal2Visible: false
         }
+
         this.columns = [
             {
                 title: 'Reference',
@@ -60,13 +62,33 @@ class TableBooking extends React.Component {
                 title: 'Operation',
                 dataIndex: 'operation',
                 key: 'operation',
-                render: (text, record) => (
+                render: (key, record) => (
                     <span>
-                        <Link to ={`/booking/${record.id}`}>
+                        <Link to={`/booking/${record.id}`}>
                             <Button type="primary">
                                 View
                             </Button>
                         </Link>
+                    </span>
+                )
+            },
+            {
+                title: 'Resend Voucher',
+                dataIndex: 'resendvoucher',
+                key: 'resendvoucher',
+                render: (key, record) => (
+                    <span>
+                        <Button type="primary" onClick={() => this.setModal2Visible(true)}>Click</Button>
+                        <Modal
+                            title="Do you want to Change Email ?"
+                            centered
+                            visible={this.state.modal2Visible}
+                            onOk={() => this.setModal2Visible(false)}
+                            onCancel={() => this.setModal2Visible(false)}
+                        >
+                            <label>Email</label>
+                            <Input />
+                        </Modal>
                     </span>
                 )
             }
@@ -80,6 +102,11 @@ class TableBooking extends React.Component {
             dataSource: dataSource.data
         })
     }
+    
+    setModal2Visible(modal2Visible) {
+        this.setState({ modal2Visible });
+    }
+    
     handleSearch = async value => {
         //axios get search api
         const dataSource = await GetSearch(value)
@@ -99,7 +126,7 @@ class TableBooking extends React.Component {
                     />
                 </ContainSearch>
                 <TableWrapper
-                    rowkey="id"
+                    rowKey="id"
                     style={{ marginTop: '2rem' }}
                     columns={columns}
                     dataSource={this.state.dataSource}

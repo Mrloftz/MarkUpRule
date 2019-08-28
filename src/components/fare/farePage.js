@@ -3,8 +3,7 @@ import 'antd/dist/antd.css';
 import { Table, Input, Button, Popconfirm, Form, Select } from 'antd';
 import styled from 'styled-components'
 import { GetFare, DeleteFare, UpdateFare, CreateFare, GetMarkUpType } from '../../_service/MethodApi';
-import { configConsumerProps } from 'antd/lib/config-provider';
-import { array } from 'prop-types';
+
 
 const EditableContext = React.createContext();
 const EditTableRow = ({ form, index, ...props }) => (
@@ -108,18 +107,19 @@ class FareComponent extends React.Component {
                 title: 'Type',
                 dataIndex: 'markupType',
                 key: 'markupType',
-                render: (key) => {
-                    return (
-                        <div><select>
-                            <option>Percent</option>
-                            <option>Bath</option>
-                            </select></div>
-                    )
-                }
                 // render: () => {
+                // return (
+                //     <Select style={{width:200}}>
+                //         <option>Percent</option>
+                //         <option>Bath</option>
+                //     </Select>
+                // )
+                // }
+                // render: () => {
+                //     const {dataType} = GetMarkUpType()
                 //     return (
                 //         <Select style={{ width: 200 }}>
-                //             {datatype.map(value => (
+                //             {dataType.map(value => (
                 //                 <Option key={value}>
                 //                     {value.name}
                 //                 </Option>
@@ -132,6 +132,7 @@ class FareComponent extends React.Component {
                 title: 'Rate',
                 dataIndex: 'markupRate',
                 width: '20%',
+                key: 'markupRate',
                 editable: true,
             },
             {
@@ -146,15 +147,13 @@ class FareComponent extends React.Component {
             },
         ];
         this.state = {
-            selectDatatype: [],
-            datatype: [],
             dataSource: [
                 {
                     key: '0',
                     name: '',
                     priceFrom: '0',
                     priceTo: '0',
-                    markupType: 'Input Your Type',
+                    markupType: 'Input your type',
                     markupRate: '0',
                 },
             ],
@@ -245,6 +244,12 @@ class FareComponent extends React.Component {
         }
         history.push("/")
     }
+
+    DeleteJa = async () => {
+        const CheckParams = this.props.params
+        console.log(CheckParams.fareId)
+        await DeleteFare(CheckParams)
+    }
     render() {
         const CheckParams = this.props.params
         const { dataSource } = this.state;
@@ -288,7 +293,9 @@ class FareComponent extends React.Component {
                     />
                 </ContainarSub>
                 <ContainerButton>
-                    {CheckParams && <Button type="danger" onClick={() => DeleteFare(CheckParams)}>
+                {/* {CheckParams && <Button type="danger" onClick={() => this.DeleteJa(CheckParams)}> */}
+
+                    {CheckParams && <Button type="danger" onClick={() => {if (window.confirm('Are you sure you wish to delete this item?')) DeleteFare(CheckParams)}}>
                         Remove
                 </Button>}
 

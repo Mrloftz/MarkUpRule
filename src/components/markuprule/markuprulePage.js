@@ -182,8 +182,7 @@ class MarkUpRuleComponent extends React.Component {
                 </div>
                 <br />
                 <div style={{ float: 'right' }}>
-                    {CheckParams.id && <Button type="danger" onClick={() => DeleteMarkUpRule(CheckParams.id)}>Remove</Button>}
-                    
+                    {CheckParams.id && <Button type="danger" onClick={() => {if (window.confirm('Are you sure you wish to delete this item?')) DeleteMarkUpRule(CheckParams.id)}}>Remove</Button>}
                     <Button type="primary" onClick={() => this.submitForm()}>Save</Button>
                 </div>
             </div>

@@ -3,7 +3,7 @@ import 'antd/dist/antd.css'
 import { Table, Popconfirm, Input, Button } from 'antd'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { GetFareAll, DeleteFare, GetList } from '../../../_service/MethodApi';
+import { GetFareAll, DeleteFare, GetList, GetListTableFare } from '../../../_service/MethodApi';
 import CreateFare from '../../button/createFare';
 
 const { Search } = Input
@@ -49,8 +49,9 @@ class TableFare extends React.Component {
     }
     async componentDidMount() {
         // axios get Data all
-        const dataSource = await GetFareAll()
-        this.setState({ dataSource: dataSource.data})
+        const dataSource = await GetListTableFare()
+        console.log(dataSource)
+        this.setState({ dataSource: dataSource.data.fares})
     }
     handleDelete = async id => {
         await DeleteFare(id)
@@ -59,7 +60,7 @@ class TableFare extends React.Component {
     handleSearch = async value => {
         // axios get search api
         const dataSource = await GetList(value)
-        this.setState({ dataSource: dataSource.data })
+        this.setState({ dataSource: dataSource.data.fares })
     }
     render() {
         const columns = this.columns
