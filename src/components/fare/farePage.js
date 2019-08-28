@@ -84,7 +84,7 @@ class EditableCell extends React.Component {
         );
     }
 }
-const Option = Select.option
+// const Option = Select.option
 class FareComponent extends React.Component {
     constructor(props) {
         super(props)

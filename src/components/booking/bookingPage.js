@@ -20,15 +20,15 @@ class BookingComponent extends React.Component {
         statusactivities: '',
         dateFrom: '',
         dateTo: '',
-        paxes: '',
-        cancellationPolicies: '',
+        paxes: null,
+        cancellationPolicies: null,
         comments: '',
     }
     async componentDidMount() {
         const CheckParams = this.props.params
         console.log(CheckParams.id)
         const BookingDetail = await GetBookingDetail(CheckParams.id)
-        console.log(BookingDetail.data)
+        console.log('test', BookingDetail.data.activities[0])
         this.setState({
             reference: BookingDetail.data.reference,
             status: BookingDetail.data.status,
@@ -38,14 +38,14 @@ class BookingComponent extends React.Component {
             totalNet: BookingDetail.data.totalNet,
             holdername: BookingDetail.data.holder.name,
             holderemail: BookingDetail.data.holder.email,
-            activitiesname: BookingDetail.data.activities.name,
-            code: BookingDetail.data.activities.code,
-            statusactivities: BookingDetail.data.activities.status,
-            dateFrom: moment(BookingDetail.data.activities.dateFrom),
-            dateTo: moment(BookingDetail.data.activities.dateTo),
-            paxes: BookingDetail.data.activities.paxes,
-            cancellationPolicies: BookingDetail.data.activities.cancellationPolicies,
-            comments: BookingDetail.data.activities.comments
+            activitiesname: BookingDetail.data.activities[0].name,
+            code: BookingDetail.data.activities[0].code,
+            statusactivities: BookingDetail.data.activities[0].status,
+            dateFrom: moment(BookingDetail.data.activities[0].dateFrom),
+            dateTo: moment(BookingDetail.data.activities[0].dateTo),
+            paxes: BookingDetail.data.activities[0].paxes,
+            cancellationPolicies: BookingDetail.data.activities[0].cancellationPolicies,
+            // comments: BookingDetail.data.activities[0].comments
         })
     }
 
@@ -54,7 +54,7 @@ class BookingComponent extends React.Component {
     //     await CancelBooking(CheckParams.id)
     // }
     render() {
-        console.log(this.state.data)
+        console.log(this.state.dateFrom)
         return (
             <div className="container">
                 <div>
@@ -73,10 +73,10 @@ class BookingComponent extends React.Component {
                     <HeadItem>activities</HeadItem>
                     <SubItem>name:{this.state.activitiesname}</SubItem>
                     <SubItem>code:{this.state.code}</SubItem>
-                    {/* <SubItem>status:{this.state.status}</SubItem> */}
-                    {/* <SubItem>date From-to:{this.state.dateFrom} {this.state.dateTo}</SubItem> */}
-                    <SubItem>paxes:{this.state.paxes}</SubItem>
-                    <SubItem>cancellationPolicies:{this.state.cancellationPolicies}</SubItem>
+                    <SubItem>status:{this.state.status}</SubItem>
+                    <SubItem>date From-to:{moment(this.state.dateFrom).format("MM/DD/YYYY")} | {moment(this.state.dateTo).format("MM/DD/YYYY")}</SubItem>
+                    <SubItem>paxes:{this.state.paxes ? this.state.paxes[0].name : null}</SubItem>
+                    <SubItem>cancellationPolicies:{this.state.cancellationPolicies ? this.state.cancellationPolicies[0].bookingActivityId : null} </SubItem>
                     <SubItem>comments:{this.state.comments}</SubItem>
                     <SubItem>Supplier:</SubItem>
                     <ContainerButton>
