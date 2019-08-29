@@ -88,8 +88,8 @@ export const CreateFare = data => {
 }
 
 // update Fare
-export const UpdateFare = body => {
-    return axios
+export const UpdateFare = async body => {
+    return  await axios
     .put(base_url + '/fare', body)
     .then(response => {
         return response

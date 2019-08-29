@@ -84,9 +84,6 @@ class EditableCell extends React.Component {
         );
     }
 }
-function onFocus() {
-    console.log("onFocus")
-}
 const Option = Select.Option
 class FareComponent extends React.Component {
     constructor(props) {
@@ -111,14 +108,16 @@ class FareComponent extends React.Component {
                 dataIndex: 'markupType',
                 key: 'markupType',
                 // editable: true,
-                render: (text, record) => {
-                    console.log(this.state)
-                    return (
+                render: (text, record,index) => {
+                    console.log(this.state.dataType , record  )
+                    return  (
                         <Select
+                            defaultValue={[text]}
                             style={{ width: 200 }}
-                            onChange={el => this.onSelectChange(record.key, el)}
+                            onChange={el => this.onSelectChange(index, el)}
                             placeholder="Select your Type"
                         >
+                            
                             {this.state.dataType.map((item, index) => (           
                                     <Option value={item.name} key={index}>{item.name}</Option>
                             ))}
@@ -157,6 +156,7 @@ class FareComponent extends React.Component {
             ],
             count: 1,
             dataType: [],
+            fareDetails: []
         }
     }
     async componentDidMount() {
@@ -165,17 +165,18 @@ class FareComponent extends React.Component {
         console.log(dataType.data)
         const CheckParams = this.props.params
         const data = await GetFare(CheckParams)
+        console.log(data)
         this.setState({
             dataSource: data.data.fareDetails,
             name: data.data.name
         })
     }
     onSelectChange = (value, el) => {
-        console.log(el)
+        console.log('el',el,value)
         let dataSource = [...this.state.dataSource]
         dataSource[value].markupType = el
          this.setState({ dataSource })
-        console.log(this.state.dataSource)
+        console.log('this.state.dataSource',this.state.dataSource)
     }
     handleDelete = key => {
         const dataSource = [...this.state.dataSource];
@@ -187,7 +188,7 @@ class FareComponent extends React.Component {
             key: count,
             priceFrom: 'Input value',
             priceTo: 'Input value',
-            markupType: this.state.markupType,
+            markupType: '',
             markupRate: 'Input value',
         };
         this.setState({
