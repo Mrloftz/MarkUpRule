@@ -6,9 +6,10 @@ import { HomeLayout } from '../../components/layout/home-layout';
 class BookingPage extends React.Component {
     render() {
         const params = this.props.match.params
+        const {history} = this.props
         return(
             <HomeLayout>
-            <BookingComponent params={params}/>
+            <BookingComponent params={params} history={history}/>
             </HomeLayout>
      
         )

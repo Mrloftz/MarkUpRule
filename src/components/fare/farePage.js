@@ -84,7 +84,7 @@ class EditableCell extends React.Component {
         );
     }
 }
-// const Option = Select.option
+const Option = Select.Option
 class FareComponent extends React.Component {
     constructor(props) {
         super(props)
@@ -107,14 +107,17 @@ class FareComponent extends React.Component {
                 title: 'Type',
                 dataIndex: 'markupType',
                 key: 'markupType',
-                // render: () => {
-                // return (
-                //     <Select style={{width:200}}>
-                //         <option>Percent</option>
-                //         <option>Bath</option>
-                //     </Select>
-                // )
-                // }
+                editable: false,
+                // editable: true,
+                render: (text, record) => {
+                    return (
+                        <Select style={{width:200}} onChange={(e) => this.onSelectChange(e)} value={this.state.markupType}>
+                            {this.state.dataType.map((item,index)=>(
+                                <Option value={item.name} key={index}>{item.name}</Option>
+                            ))}
+                        </Select>
+                    )
+                }
                 // render: () => {
                 //     const {dataType} = GetMarkUpType()
                 //     return (
@@ -147,27 +150,24 @@ class FareComponent extends React.Component {
             },
         ];
         this.state = {
+            name: '',
             dataSource: [
                 {
-                    key: '0',
-                    name: '',
-                    priceFrom: '0',
-                    priceTo: '0',
-                    markupType: 'Input your type',
-                    markupRate: '0',
+                    key: 0,
+                    priceFrom: 0,
+                    priceTo: 0,
+                    markupType: '',
+                    markupRate: 0,
                 },
             ],
-            count: 2,
+            count: 1,
+            dataType: [],
         }
     }
     async componentDidMount() {
-        // const dataType = await GetMarkUpType()
-        // const selectDatatype = dataType.data.map(value => {
-        //     return {
-        //         label: value.name, value
-        //     }
-        // })
-        // this.setState({ selectDatatype })
+        const dataType = await GetMarkUpType()
+        this.setState({ dataType : dataType.data})
+        console.log(dataType.data)
         const CheckParams = this.props.params
         const data = await GetFare(CheckParams)
         this.setState({
@@ -175,14 +175,37 @@ class FareComponent extends React.Component {
             name: data.data.name
         })
     }
-    onSelectChange({ value }) {
+    onSelectChange = (value,row) => {
         console.log(value)
-        const type = value
-        this.setState({
-            name: type.name
-        })
+        const DataMarkuptype = value
+        console.log(DataMarkuptype)
+        let newData = [...this.state.dataSource]
+        console.log(newData)
+        // console.log(index)
+        // const item = dataSource[index].markupType
+        // dataSource.splice(index, 1, {
+        //     ...item,
+        //     ...row
+        // })
+        // dataSource[index].markupType = value
+        // this.setState({ dataSource: dataSource })
+        // this.setState({ dataSource })       
+        // dataSource[index].markType = value
+        // console.log(dataSource.markupType)
+        // const type = value
+        // this.setState({ 
+        //     markupType: type
+        // })
+        // let dataSource = {...this.state.dataSource}
+        //     dataSource.markupType = value
+        //     this.setState({dataSource})
+        // const type = value
+        // this.setState({
+        //     type: type
+        // })
     }
     handleDelete = id => {
+        console.log(id)
         const dataSource = [...this.state.dataSource];
         console.log(dataSource)
         this.setState({ dataSource: dataSource.filter(item => item.id !== id) });
@@ -193,7 +216,7 @@ class FareComponent extends React.Component {
             key: count,
             priceFrom: 'Input value',
             priceTo: 'Input value',
-            markupType: `Input Your Type ${count}`,
+            markupType: 'Input your Type',
             markupRate: 'Input value',
         };
         this.setState({
@@ -245,10 +268,12 @@ class FareComponent extends React.Component {
         history.push("/")
     }
 
-    DeleteJa = async () => {
+    removeFare = async () => {
+        alert("Remove Success")
+        const {history} = this.props
         const CheckParams = this.props.params
-        console.log(CheckParams.fareId)
-        await DeleteFare(CheckParams)
+        // await DeleteFare(CheckParams)
+        history.push("/")
     }
     render() {
         const CheckParams = this.props.params
@@ -293,9 +318,9 @@ class FareComponent extends React.Component {
                     />
                 </ContainarSub>
                 <ContainerButton>
-                {/* {CheckParams && <Button type="danger" onClick={() => this.DeleteJa(CheckParams)}> */}
+                {CheckParams && <Button type="danger" onClick={this.removeFare}>
 
-                    {CheckParams && <Button type="danger" onClick={() => {if (window.confirm('Are you sure you wish to delete this item?')) DeleteFare(CheckParams)}}>
+                    {/* {CheckParams && <Button type="danger" onClick={() => {if (window.confirm('Are you sure you wish to delete this item?')) DeleteFare(CheckParams)}}> */}
                         Remove
                 </Button>}
 

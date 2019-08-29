@@ -25,6 +25,12 @@ export const CriteriaComponent = props => {
     const {history} = props
     console.log(history)
 
+    // const removeCriteria = async () => {
+    //     alert("Remove Success")
+    //     // await DeleteCriteria(CheckParams)
+    //     history.push("/")
+    // }
+
     const onChange = checkedList => {
         setCheckAll(checkedList.length === paxTypes.length)
         setcheckedList(checkedList)
@@ -156,6 +162,7 @@ export const CriteriaComponent = props => {
                                 placeholder="Activity Names"
                             />
                             <ContainerButton>
+                            {/* {CheckParams && <Button type="danger" onClick={removeCriteria()}> */}
                                 {CheckParams.id && <Button type="danger" onClick={() => {if (window.confirm('Are you sure you wish to delete this item?')) DeleteCriteria(CheckParams.id)} }>
                                     Remove
                             </Button>}
