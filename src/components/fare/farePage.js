@@ -84,6 +84,9 @@ class EditableCell extends React.Component {
         );
     }
 }
+function onFocus() {
+    console.log("onFocus")
+}
 const Option = Select.Option
 class FareComponent extends React.Component {
     constructor(props) {
@@ -107,34 +110,21 @@ class FareComponent extends React.Component {
                 title: 'Type',
                 dataIndex: 'markupType',
                 key: 'markupType',
-                editable: false,
                 // editable: true,
                 render: (text, record) => {
-                    console.log(record.key)
+                    console.log(this.state)
                     return (
-                        <Select 
-                        style={{ width: 200 }}
-                        onChange={el => this.onSelectChange(record.key,el)} 
-                        placeholder="Select your Type" 
-                        >   
-                            {this.state.dataType.map((item, index) => (
-                                <Option selected={item} value={item.name} key={index}>{item.name}</Option>
+                        <Select
+                            style={{ width: 200 }}
+                            onChange={el => this.onSelectChange(record.key, el)}
+                            placeholder="Select your Type"
+                        >
+                            {this.state.dataType.map((item, index) => (           
+                                    <Option value={item.name} key={index}>{item.name}</Option>
                             ))}
                         </Select>
                     )
                 }
-                // render: () => {
-                //     const {dataType} = GetMarkUpType()
-                //     return (
-                //         <Select style={{ width: 200 }}>
-                //             {dataType.map(value => (
-                //                 <Option key={value}>
-                //                     {value.name}
-                //                 </Option>
-                //             ))}
-                //         </Select>
-                //     )
-                // }
             },
             {
                 title: 'Rate',
@@ -143,16 +133,16 @@ class FareComponent extends React.Component {
                 key: 'markupRate',
                 editable: true,
             },
-            {
-                title: 'Delete',
-                dataIndex: 'delete',
-                render: (text, record) =>
-                    this.state.dataSource.length >= 1 ? (
-                        <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
-                            <a>Delete</a>
-                        </Popconfirm>
-                    ) : null,
-            },
+            // {
+            //     title: 'Delete',
+            //     dataIndex: 'delete',
+            //     render: (text, record) =>
+            //         this.state.dataSource.length >= 1 ? (
+            //             <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
+            //                 <a>Delete</a>
+            //             </Popconfirm>
+            //         ) : null,
+            // },
         ];
         this.state = {
             name: '',
@@ -180,10 +170,11 @@ class FareComponent extends React.Component {
             name: data.data.name
         })
     }
-    onSelectChange = async(value,el) => {
+    onSelectChange = (value, el) => {
+        console.log(el)
         let dataSource = [...this.state.dataSource]
         dataSource[value].markupType = el
-        await this.setState({ dataSource })
+         this.setState({ dataSource })
         console.log(this.state.dataSource)
     }
     handleDelete = key => {
@@ -196,7 +187,7 @@ class FareComponent extends React.Component {
             key: count,
             priceFrom: 'Input value',
             priceTo: 'Input value',
-            markupType: '',
+            markupType: this.state.markupType,
             markupRate: 'Input value',
         };
         this.setState({
@@ -282,13 +273,11 @@ class FareComponent extends React.Component {
         return (
             <div>
                 <ContainarSub>
-                    {CheckParams &&<h1>Edit Fare</h1> }
+                    {CheckParams && <h1>Edit Fare</h1>}
                     {!CheckParams && <h1>Create Fare</h1>}
                     <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
                         Add a row
             </Button>
-
-
                     <Input type="text" name="name" value={this.state.name} onChange={this.handleInput} placeholder="Input your table name" style={{ width: 'fit-content', marginLeft: '10px' }} />
                     <TableWrapper
                         rowKey="id"
@@ -301,7 +290,6 @@ class FareComponent extends React.Component {
                 </ContainarSub>
                 <ContainerButton>
                     {CheckParams && <Button type="danger" onClick={this.removeFare}>
-
                         {/* {CheckParams && <Button type="danger" onClick={() => {if (window.confirm('Are you sure you wish to delete this item?')) DeleteFare(CheckParams)}}> */}
                         Remove
                 </Button>}
