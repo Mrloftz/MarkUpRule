@@ -1,8 +1,9 @@
 import React from 'react'
 import 'antd/dist/antd.css';
-import { Table, Input, Button, Popconfirm, Form, Select } from 'antd';
+import { Table, Input, Button, Popconfirm, Form, Select, Divider } from 'antd';
 import styled from 'styled-components'
 import { GetFare, DeleteFare, UpdateFare, CreateFare, GetMarkUpType } from '../../_service/MethodApi';
+import { Link } from 'react-router-dom'
 
 
 const EditableContext = React.createContext();
@@ -95,6 +96,12 @@ class FareComponent extends React.Component {
                 key: 'priceFrom',
                 width: '20%',
                 editable: true,
+                render: (value, row, index) => {
+                    console.log("value", value)
+                    console.log("row", row)
+                    console.log("index", index)
+                    return <input defaultValue={[value]}/>
+                }
             },
             {
                 title: 'To',
@@ -102,6 +109,9 @@ class FareComponent extends React.Component {
                 key: 'priceTo',
                 width: '20%',
                 editable: true,
+                render: (value, row ,index) => {
+                    return <input defaultValue={[value]}/>
+                }
             },
             {
                 title: 'Type',
@@ -117,7 +127,6 @@ class FareComponent extends React.Component {
                             onChange={el => this.onSelectChange(index, el)}
                             placeholder="Select your Type"
                         >
-                            
                             {this.state.dataType.map((item, index) => (           
                                     <Option value={item.name} key={index}>{item.name}</Option>
                             ))}
@@ -131,22 +140,37 @@ class FareComponent extends React.Component {
                 width: '20%',
                 key: 'markupRate',
                 editable: true,
+                render: (value, row, index) => {
+                    return <input defaultValue={[value]}/>
+                }
             },
-            // {
-            //     title: 'Delete',
-            //     dataIndex: 'delete',
-            //     render: (text, record) =>
-            //         this.state.dataSource.length >= 1 ? (
-            //             <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
-            //                 <a>Delete</a>
-            //             </Popconfirm>
-            //         ) : null,
-            // },
+            {
+                title: 'Action',
+                dataIndex: 'action',
+                render: (text, record) => (
+                    <span>
+                        <Link to={`/fare/${record.id}`}>
+                            <label>Edit</label>
+                        </Link>
+                        <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.id)}>
+                        <Divider type="vertical" />
+                            <label>Delete</label>
+                        </Popconfirm>
+                    </span>
+                )
+                // render: (text, record) =>
+                //     this.state.dataSource.length >= 1 ? (
+                //         <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
+                //             <a>Delete</a>
+                //         </Popconfirm>
+                //     ) : null,
+            },
         ];
         this.state = {
             name: '',
             dataSource: [
                 {
+                    id: '',
                     key: 0,
                     priceFrom: 0,
                     priceTo: 0,
@@ -168,6 +192,7 @@ class FareComponent extends React.Component {
         console.log(data)
         this.setState({
             dataSource: data.data.fareDetails,
+            fareDetails: data.data.id,
             name: data.data.name
         })
     }
@@ -180,16 +205,19 @@ class FareComponent extends React.Component {
     }
     handleDelete = key => {
         const dataSource = [...this.state.dataSource];
-        this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+        this.setState({ 
+            dataSource: dataSource.filter(item => item.key !== key) }
+            
+        );
     };
     handleAdd = () => {
         const { count, dataSource } = this.state;
         const newData = {
             key: count,
-            priceFrom: 'Input value',
-            priceTo: 'Input value',
+            priceFrom: ' ',
+            priceTo: '',
             markupType: '',
-            markupRate: 'Input value',
+            markupRate: '',
         };
         this.setState({
             dataSource: [...dataSource, newData],
@@ -217,10 +245,12 @@ class FareComponent extends React.Component {
             name: this.state.name,
             fareDetails: dataSource.map(value => {
                 return {
+                    id: value.id,
                     markupRate: value.markupRate,
                     markupType: value.markupType,
                     priceFrom: value.priceFrom,
                     priceTo: value.priceTo,
+                    updateType: value.updateType
                 }
             })
         }
@@ -230,7 +260,6 @@ class FareComponent extends React.Component {
                 ...data,
                 id: CheckParams,
                 fareId: CheckParams,
-                updateType: "update"
             }
             UpdateFare(data)
         } else {

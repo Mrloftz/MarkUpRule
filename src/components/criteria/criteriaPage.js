@@ -3,8 +3,9 @@ import { Formik, Field } from 'formik'
 import { FieldInput } from '../../components/input'
 import { ValidateSchema } from '../../helper/validator'
 import styled from 'styled-components'
-import { GetCriteria, DeleteCriteria, UpdateCriteria, CriteriaCreate } from '../../_service/MethodApi';
-import { Button, Checkbox } from 'antd'
+import { GetCriteria, DeleteCriteria, UpdateCriteria, CriteriaCreate, GetPaxType } from '../../_service/MethodApi';
+import { Button, Checkbox, Form, Col } from 'antd'
+import { FieldInputArea } from '../input/in-putarae';
 export const CriteriaComponent = props => {
     const [name, setName] = useState()
     const [destinations, setDestinations] = useState([])
@@ -22,19 +23,17 @@ export const CriteriaComponent = props => {
     // const [indeterminate, setIndeterminate] = useState(true)
     const CheckboxGroup = Checkbox.Group;
     const CheckParams = props.params
-    const {history} = props
-    console.log(history)
+    const { history } = props
 
-    // const removeCriteria = async () => {
-    //     alert("Remove Success")
-    //     // await DeleteCriteria(CheckParams)
-    //     history.push("/")
-    // }
+    const removeCriteria = async () => {
+        await DeleteCriteria(CheckParams.id)
+        alert("Remove Success")
+        history.push("/")
+    }
 
     const onChange = checkedList => {
         setCheckAll(checkedList.length === paxTypes.length)
         setcheckedList(checkedList)
-        console.log(checkedList)
     }
     const onCheckAllChange = e => {
         if (e.target.checked) {
@@ -46,42 +45,49 @@ export const CriteriaComponent = props => {
     }
     useEffect(() => {
         const fetchData = async id => {
+            const paxtype = await GetPaxType()
             const { data } = await GetCriteria(id)
             console.log(data)
             setName(data.name)
             setDestinations(data.destinations)
             SetCountries(data.countries)
             setActivityNames(data.activityNames)
-            setCheckAll(data.checkAll)
+            // setCheckAll(data.checkAll)
             setcheckedList(data.paxTypes)
+
+            setCheckAll(data.paxTypes.length === paxtype.data.length)
+            // console.log(data.paxTypes.length)
+            // console.log(paxtype)
+
             // setCountry(data.country)
             // setPaxTypes(data.paxTypes)
             // setPaxType(data.paxType)
             // setCheckAll(data.paxTypes)
             // setActivityName(data.activityName)
-            
         }
         if (CheckParams.id) {
             fetchData(CheckParams.id)
         }
     }, [CheckParams.id])
-
     return (
         <React.Fragment>
             <FormContainer>
-                <h1>Criteria</h1>
+                <div className="col-md-12">
+                    {CheckParams.id && <h1>Edit Criteria</h1>}
+                    {!CheckParams.id && <h1>Create Criteria</h1>}
+                </div>
                 <Formik
                     initialValues={{
                         name,
                         destinations,
-                        destination,
+                        // destination,
                         countries,
-                        country,
+                        // country,
                         paxTypes,
-                        paxType,
+                        // paxType,
                         checkedList,
                         activityNames,
-                        activityName,
+                        // activityName,
                     }}
                     enableReinitialize={true}
                     validate={ValidateSchema}
@@ -103,75 +109,85 @@ export const CriteriaComponent = props => {
                                 paxType: formValues.paxType,
                                 activityName: formValues.activityName,
                             }
-                            alert("Update Success")
                             const responseUpdate = await UpdateCriteria(data)
+                            alert("Update Success")
                             console.log(responseUpdate)
                         } else {
-                            alert("Create Success")
                             const responseCreate = await CriteriaCreate(data)
+                            alert("Create Success")
                             console.log(responseCreate)
                         }
                         history.push('/')
                     }}
                     render={props => (
                         <form onSubmit={props.handleSubmit}>
-                            <Titlesub>Type of Pax</Titlesub>
-                            <div style={{ borderBottom: '1px solid #E9E9E9' }}>
-                                <Checkbox
-                                    onChange={onCheckAllChange}
-                                    checked={checkAll}
-                                >
-                                    Check all
-                            </Checkbox>
-                            </div>
-                            <CheckboxGroup
-                                options={paxTypes}
-                                value={checkedList}
-                                onChange={onChange}
-                            />
-                            <Titlesub>Name</Titlesub>
-                            <Field
-                                name="name"
-                                component={FieldInput}
-                                value={props.values.name}
-                                onChange={props.handleChange}
-                                placeholder="Name"
-                            />
-                            <Titlesub>Destinations</Titlesub>
-                            <Field
-                                name="destinations"
-                                component={FieldInput}
-                                value={props.values.destinations}
-                                onChange={props.handleChange}
-                                placeholder="Destinations"
-                            />
-                            <Titlesub>Country Code</Titlesub>
-                            <Field
-                                name="countries"
-                                component={FieldInput}
-                                value={props.values.countries}
-                                onChange={props.handleChange}
-                                placeholder="Country code"
-                            />
-                            <Titlesub>Activity Name (Ex. %Destiny%)</Titlesub>
-                            <Field
-                                name="activityNames"
-                                component={FieldInput}
-                                value={props.values.activityNames}
-                                onChange={props.handleChange}
-                                placeholder="Activity Names"
-                            />
-                            <ContainerButton>
-                            {/* {CheckParams && <Button type="danger" onClick={removeCriteria()}> */}
-                                {CheckParams.id && <Button type="danger" onClick={() => {if (window.confirm('Are you sure you wish to delete this item?')) DeleteCriteria(CheckParams.id)} }>
-                                    Remove
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <Titlesub>Type of Pax</Titlesub>
+                                    <Checkbox
+                                        onChange={onCheckAllChange}
+                                        checked={checkAll}
+                                    >
+                                        Check all
+                                    </Checkbox>
+                                    <CheckboxGroup
+                                        options={paxTypes}
+                                        value={checkedList}
+                                        onChange={onChange}
+                                    />
+                                </div>
+                                <div className="col-md-12">
+                                    <Titlesub>Name</Titlesub>
+                                    <Field
+                                        name="name"
+                                        component={FieldInput}
+                                        value={props.values.name}
+                                        onChange={props.handleChange}
+                                        placeholder="Name"
+                                    />
+                                </div>
+                                <div className="col-md-6">
+                                    <Titlesub>Destinations</Titlesub>
+                                    <Field
+                                        name="destinations"
+                                        component={FieldInput}
+                                        value={props.values.destinations}
+                                        onChange={props.handleChange}
+                                        placeholder="Destinations"
+                                    />
+                                </div>
+                                <div className="col-md-6">
+                                    <Titlesub>Country Code</Titlesub>
+                                    <Field
+                                        name="countries"
+                                        component={FieldInput}
+                                        value={props.values.countries}
+                                        onChange={props.handleChange}
+                                        placeholder="Country code"
+                                    />
+                                </div>
+                                <div className="col-md-12">
+                                    <Titlesub>Activity Name (Ex. %Destiny%)</Titlesub>
+                                    <Field
+                                        name="activityNames"
+                                        component={FieldInputArea}
+                                        value={props.values.activityNames}
+                                        onChange={props.handleChange}
+                                        placeholder="Activity Names"
+                                    />
+                                </div>
+                                <div className="col-md-12">
+                                    <ContainerButton>
+                                        {CheckParams && <Button type="danger" onClick={() => removeCriteria(CheckParams.id)}>
+                                            {/* {CheckParams.id && <Button type="danger" onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) DeleteCriteria(CheckParams.id) }}> */}
+                                            Remove
                             </Button>}
-                                
-                                <Button type="primary" htmlType="submit">
-                                    Save
+                                        <Button type="primary" htmlType="submit">
+                                            Save
                             </Button>
-                            </ContainerButton>
-
+                                    </ContainerButton>
+                                </div>
+                            </div>
                         </form>
                     )}
                 />
@@ -183,10 +199,11 @@ export const CriteriaComponent = props => {
 const ContainerButton = styled.div`
   display: flex;
   margin-top: 1rem;
+  float: right;
 `
 const FormContainer = styled.div`
   background: #d6f4fd;
-  padding: 2rem;
+  padding: 5rem;
 `
 const Titlesub = styled.div`
  margin-top: 1rem;

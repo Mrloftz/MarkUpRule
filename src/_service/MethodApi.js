@@ -172,7 +172,7 @@ export const CriteriaCreate = data => {
     return axios
     .post(base_url + '/criteria', data)
     .then(response => {
-        return response
+        console.log(response)
     })
     .catch(error => {
         return error
@@ -335,6 +335,18 @@ export const GetBookingDetail = async id => {
 export const CancelBooking = async id => {
     return await axios
     .get(base_url + `/booking/${id}`)
+    .then(response => {
+        return response
+    })
+    .catch(error => {
+        return error
+    })
+}
+
+// Get PaxTypes
+export const GetPaxType = async () => {
+    return await axios
+    .get(base_url + '/criteria/paxType')
     .then(response => {
         return response
     })
