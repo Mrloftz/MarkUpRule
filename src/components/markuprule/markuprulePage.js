@@ -5,6 +5,7 @@ import { CreateMarkupRule, GetCriteriaAll, GetFareAll, GetMarkupRule, DeleteMark
 import styled from 'styled-components'
 import { DatePicker, Button, Input } from 'antd'
 import moment from 'moment'
+import ListBodyWrapper from 'antd/lib/transfer/renderListBody';
 const { TextArea } = Input;
 class MarkUpRuleComponent extends React.Component {
     state = {
@@ -124,33 +125,50 @@ class MarkUpRuleComponent extends React.Component {
         const CheckParams = this.props.params
         const { selectCriteriaData, selectFareData } = this.state
         console.log(this.state)
-        return (
-            <div className="container" >
+        return (    
+                <div className="container">          
+                {!CheckParams && <h1>Create MarkUprule</h1>}
+                {CheckParams && <h1>Edit MarkUpRule: {this.state.nameMarkupRule} </h1>}
                 <div className="row">
-                    <div className="col-md-4"></div>
-                    <div className="col-md-4">
-                        <Select options={selectCriteriaData} onChange={(e) => this.onSelectChange(e, 1)} />
-                        <h1 style={{ textAlign: "center" }}>Criteria</h1>
-                    </div>
-                    <div className="col-md-4"></div>
+          
+                   
+                <div className="col-md-12">
+                    <label>Name</label>
+                    <TextArea type="text" name="nameMarkupRule" value={this.state.nameMarkupRule} onChange={this.handleInput} placeholder="กรุณาใส่รายละเอียดฟอร์ม" autosize />
                 </div>
-                {CheckParams.id && <Titlesub>Name :{this.state.selectnameCriteria}</Titlesub>}
+                <div className="col-md-6">
+                    <div>Date From</div>
+                    <DatePicker
+                        name="startDateTime"
+                        placeholder="Start Date"
+                        value={this.state.startDateTime}
+                        onChange={(e) => this.handleDateChange(e, 'startDateTime')}
+                    />
+                    </div>
+                    <div className="col-md-6">
+                        <div>Date To</div>
+                    <DatePicker
+                        name="endDateTime"
+                        placeholder="End Date"
+                        value={this.state.endDateTime}
+                        onChange={(e) => this.handleDateChange(e, 'endDateTime')}
+                    />
+                </div>
+                    <div className="col-md-6">
+                        <h1 style={{ textAlign: "center" }}>Criteria</h1>
+                        <Select options={selectCriteriaData} onChange={(e) => this.onSelectChange(e, 1)} />
+                        {CheckParams.id && <Titlesub>Name :{this.state.selectnameCriteria}</Titlesub>}
                 {/* <Titlesub>Name: {this.state.selectnameCriteria}</Titlesub> */}
                 <Titlesub>Destinations: {this.state.destinations}</Titlesub>
                 <Titlesub>Country Code: {this.state.countries}</Titlesub>
                 <Titlesub>Type of Pax: {this.state.paxTypes}</Titlesub>
                 <Titlesub>Activity Name: {this.state.activityNames}</Titlesub>
-                <br />
-                <div className="row">
-                    <div className="col-md-4"></div>
-                    <div className="col-md-4">
-                        <Select options={selectFareData} onChange={(e) => this.onSelectChange(e, 2)} />
-                        <h1 style={{ textAlign: "center" }}>Fare</h1>
                     </div>
-                    <div className="col-md-4"></div>
-                </div>
-                    {CheckParams.id && <Titlesub>Name : {this.state.selectnameFare}</Titlesub>}
-                {
+                    <div className="col-md-6">
+                        <h1 style={{ textAlign: "center" }}>Fare</h1>
+                        <Select options={selectFareData} onChange={(e) => this.onSelectChange(e, 2)} />
+                        {CheckParams.id && <Titlesub>Name : {this.state.selectnameFare}</Titlesub>}
+                         {
                     this.state.fareData.map((fare, index) => {
                         return <React.Fragment key={index}>
                             <Titlesub>From: {fare.priceFrom}</Titlesub>
@@ -161,31 +179,14 @@ class MarkUpRuleComponent extends React.Component {
                         </React.Fragment>
                     })
                 }
-                <br />
-                <div>
-                    <TextArea type="text" name="nameMarkupRule" value={this.state.nameMarkupRule} onChange={this.handleInput} placeholder="กรุณาใส่รายละเอียดฟอร์ม" autosize />
+                    </div>                
+   
                 </div>
-                <br />
-                <div>
-                    <DatePicker
-                        name="startDateTime"
-                        placeholder="Start Date"
-                        value={this.state.startDateTime}
-                        onChange={(e) => this.handleDateChange(e, 'startDateTime')}
-                    />
-                    <DatePicker
-                        name="endDateTime"
-                        placeholder="End Date"
-                        value={this.state.endDateTime}
-                        onChange={(e) => this.handleDateChange(e, 'endDateTime')}
-                    />
-                </div>
-                <br />
-                <div style={{ float: 'right' }}>
+                 <div style={{ float: 'right' }}>
                     {CheckParams.id && <Button type="danger" onClick={() => {if (window.confirm('Are you sure you wish to delete this item?')) DeleteMarkUpRule(CheckParams.id)}}>Remove</Button>}
                     <Button type="primary" onClick={() => this.submitForm()}>Save</Button>
                 </div>
-            </div>
+                </div>
         )
     }
 }
